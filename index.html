@@ -1,0 +1,1991 @@
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>我的导航 - 书签收藏管理</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #4a6cf7;
+            --secondary-color: #6c757d;
+            --neutral-color: #f8f9fa;
+            --text-color: #333;
+            --border-color: #e9ecef;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --radius: 10px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', 'Noto Sans', 'Microsoft YaHei', sans-serif;
+            background-color: #f5f7ff;
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* 顶部导航栏 */
+        header {
+            background-color: white;
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: var(--primary-color);
+            display: flex;
+            align-items: center;
+        }
+
+        .logo i {
+            margin-right: 10px;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 15px;
+        }
+
+        .btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: var(--radius);
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .btn-primary {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: #3a5bd9;
+        }
+
+        .btn-secondary {
+            background-color: var(--neutral-color);
+            color: var(--text-color);
+        }
+
+        .btn-secondary:hover {
+            background-color: #e9ecef;
+        }
+
+        .btn-icon {
+            width: 36px;
+            height: 36px;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+        }
+
+        /* 日志容器 */
+        .log-container {
+            margin-top: 15px;
+            padding: 10px;
+            background-color: #f8f9fa;
+            border-radius: 5px;
+            font-size: 13px;
+            max-height: 150px;
+            overflow-y: auto;
+            display: none;
+        }
+
+        .log-container.active {
+            display: block;
+        }
+
+        .log-entry {
+            margin-bottom: 5px;
+            padding: 5px;
+            border-radius: 3px;
+        }
+
+        .log-entry.success {
+            background-color: #d4edda;
+            color: #155724;
+        }
+
+        .log-entry.error {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+
+        .log-entry.info {
+            background-color: #d1ecf1;
+            color: #0c5460;
+        }
+
+        /* 警告提示 */
+        .alert {
+            padding: 10px 15px;
+            border-radius: 5px;
+            margin-bottom: 15px;
+        }
+
+        .alert-warning {
+            background-color: #fff3cd;
+            color: #856404;
+            border: 1px solid #ffeeba;
+        }
+
+        .form-text {
+            font-size: 12px;
+            color: #6c757d;
+            margin-top: 5px;
+        }
+
+        /* 分类标签 */
+        .categories {
+            padding: 20px 0;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .category-tag {
+            padding: 8px 16px;
+            background-color: white;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        .category-tag:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow);
+        }
+
+        .category-tag.active {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        /* 网站卡片区域 */
+        .main-content {
+            padding: 20px 0 40px;
+        }
+
+        .category-section {
+            margin-bottom: 40px;
+        }
+
+        .category-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .category-title {
+            font-size: 22px;
+            font-weight: 600;
+            color: var(--text-color);
+            display: flex;
+            align-items: center;
+        }
+
+        .category-title i {
+            margin-right: 10px;
+            color: var(--primary-color);
+        }
+
+        .website-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+        }
+
+        .website-card {
+            background-color: white;
+            border-radius: var(--radius);
+            padding: 20px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+            position: relative;
+            cursor: move;
+        }
+
+        .website-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow);
+        }
+
+        .website-card.dragging {
+            opacity: 0.5;
+        }
+
+        .website-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .website-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            margin-right: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: var(--neutral-color);
+            overflow: hidden;
+        }
+
+        .website-icon img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .website-icon i {
+            font-size: 20px;
+            color: var(--primary-color);
+        }
+
+        .website-name {
+            font-size: 16px;
+            font-weight: 600;
+            flex-grow: 1;
+        }
+
+        .website-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .action-btn {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: var(--neutral-color);
+            color: var(--secondary-color);
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .action-btn:hover {
+            background-color: #e9ecef;
+        }
+
+        .action-btn.edit:hover {
+            color: var(--primary-color);
+        }
+
+        .action-btn.delete:hover {
+            color: #dc3545;
+        }
+
+        .website-description {
+            font-size: 14px;
+            color: var(--secondary-color);
+            margin-bottom: 12px;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .website-url {
+            font-size: 13px;
+            color: var(--secondary-color);
+            display: flex;
+            align-items: center;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .website-url i {
+            margin-right: 5px;
+            font-size: 12px;
+        }
+
+        /* 模态框 */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background-color: white;
+            border-radius: var(--radius);
+            width: 90%;
+            max-width: 500px;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            animation: modalFadeIn 0.3s ease;
+        }
+
+        @keyframes modalFadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .modal-header {
+            padding: 20px;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-title {
+            font-size: 20px;
+            font-weight: 600;
+        }
+
+        .modal-close {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: var(--neutral-color);
+            color: var(--secondary-color);
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .modal-close:hover {
+            background-color: #e9ecef;
+        }
+
+        .modal-body {
+            padding: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius);
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+
+        .form-control:focus {
+            border-color: var(--primary-color);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(74, 108, 247, 0.1);
+        }
+
+        textarea.form-control {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        .form-select {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius);
+            font-size: 14px;
+            background-color: white;
+            cursor: pointer;
+        }
+
+        .icon-selector {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .icon-option {
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: var(--neutral-color);
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .icon-option:hover {
+            background-color: #e9ecef;
+        }
+
+        .icon-option.selected {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .modal-footer {
+            padding: 15px 20px;
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+        }
+
+        /* 空状态 */
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            color: var(--secondary-color);
+        }
+
+        .empty-state i {
+            font-size: 48px;
+            margin-bottom: 15px;
+            color: #ccc;
+        }
+
+        .empty-state p {
+            margin-bottom: 20px;
+        }
+
+        /* Firebase状态指示器 */
+        .firebase-status {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            padding: 8px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            z-index: 100;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .firebase-status.connected {
+            background-color: #d4edda;
+            color: #155724;
+        }
+
+        .firebase-status.disconnected {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+
+        .firebase-status.connecting {
+            background-color: #fff3cd;
+            color: #856404;
+        }
+
+        .firebase-status i {
+            font-size: 10px;
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .website-grid {
+                grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+            }
+            
+            .header-content {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .categories {
+                justify-content: center;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .website-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* 页脚 */
+        footer {
+            background-color: white;
+            padding: 20px 0;
+            text-align: center;
+            color: var(--secondary-color);
+            font-size: 14px;
+            border-top: 1px solid var(--border-color);
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <i class="fas fa-bookmark"></i>
+                    <span>我的导航</span>
+                </div>
+                <div class="header-actions">
+                    <button class="btn btn-secondary" id="importBtn">
+                        <i class="fas fa-file-import"></i>
+                        <span>导入书签</span>
+                    </button>
+                    <button class="btn btn-secondary btn-icon" id="exportDataBtn" title="导出数据">
+                        <i class="fas fa-download"></i>
+                    </button>
+                    <button class="btn btn-secondary btn-icon" id="importDataBtn" title="导入数据">
+                        <i class="fas fa-upload"></i>
+                    </button>
+                    <button class="btn btn-primary" id="addBtn">
+                        <i class="fas fa-plus"></i>
+                        <span>添加网站</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="categories" id="categories">
+            <!-- 分类标签将通过JS动态生成 -->
+        </div>
+
+        <div class="main-content" id="mainContent">
+            <!-- 网站卡片将通过JS动态生成 -->
+        </div>
+    </div>
+
+    <!-- 添加/编辑网站模态框 -->
+    <div class="modal" id="websiteModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title" id="modalTitle">添加网站</h3>
+                <div class="modal-close" id="modalClose">
+                    <i class="fas fa-times"></i>
+                </div>
+            </div>
+            <div class="modal-body">
+                <form id="websiteForm">
+                    <input type="hidden" id="websiteId">
+                    <div class="form-group">
+                        <label class="form-label" for="websiteName">网站名称</label>
+                        <input type="text" class="form-control" id="websiteName" placeholder="输入网站名称" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="websiteUrl">网站地址</label>
+                        <input type="url" class="form-control" id="websiteUrl" placeholder="https://example.com" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="websiteDescription">网站描述</label>
+                        <textarea class="form-control" id="websiteDescription" placeholder="输入网站描述"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="websiteCategory">网站分类</label>
+                        <select class="form-select" id="websiteCategory" required>
+                            <!-- 选项将通过JS动态生成 -->
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">网站图标</label>
+                        <div class="icon-selector" id="iconSelector">
+                            <!-- 图标选项将通过JS动态生成 -->
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" id="cancelBtn">取消</button>
+                <button class="btn btn-primary" id="saveBtn">保存</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 导入数据模态框 -->
+    <div class="modal" id="importDataModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">导入数据</h3>
+                <div class="modal-close" id="importDataModalClose">
+                    <i class="fas fa-times"></i>
+                </div>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="form-label" for="dataFile">选择数据文件</label>
+                    <input type="file" class="form-control" id="dataFile" accept=".json">
+                    <small class="form-text text-muted">支持JSON格式的书签数据文件</small>
+                </div>
+                <div class="alert alert-warning">
+                    <i class="fas fa-exclamation-triangle"></i> 导入数据将覆盖现有数据，请谨慎操作！
+                </div>
+                <div id="importDataLog" class="log-container"></div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" id="importDataCancelBtn">取消</button>
+                <button class="btn btn-primary" id="importDataSaveBtn">导入</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 导入书签模态框 -->
+    <div class="modal" id="importModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">导入书签</h3>
+                <div class="modal-close" id="importModalClose">
+                    <i class="fas fa-times"></i>
+                </div>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="form-label" for="bookmarkFile">选择书签文件</label>
+                    <input type="file" class="form-control" id="bookmarkFile" accept=".html">
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="bookmarkText">或粘贴HTML书签代码</label>
+                    <textarea class="form-control" id="bookmarkText" rows="8" placeholder="粘贴书签HTML代码"></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" id="importCancelBtn">取消</button>
+                <button class="btn btn-primary" id="importSaveBtn">导入</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Firebase状态指示器 -->
+    <div class="firebase-status connecting" id="firebaseStatus">
+        <i class="fas fa-circle"></i>
+        <span>连接中...</span>
+    </div>
+
+    <footer>
+        <p>作者: AutoGLM (网页内容由AI生成) Copyright © 2025 AutoGLM. 保留所有权利.</p>
+    </footer>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
+    
+    <script>
+        /*
+         * Firebase实时数据库集成说明
+         * =============================
+         * 
+         * 本网页已从localStorage升级为使用Firebase实时数据库，实现以下功能：
+         * 
+         * 1. 数据云端存储：所有书签数据存储在Firebase实时数据库中
+         * 2. 实时同步：多个设备或用户之间的数据实时同步
+         * 3. 连接状态监控：右下角显示Firebase连接状态
+         * 4. 离线支持：网络断开时数据保存在本地，恢复连接后自动同步
+         * 
+         * 使用方法：
+         * 1. 在Firebase控制台创建项目
+         * 2. 启用Realtime Database
+         * 3. 将配置信息替换为您的项目配置
+         * 4. 部署网页并测试
+         * 
+         * 注意事项：
+         * - 确保在Firebase控制台中设置了适当的安全规则
+         * - 默认情况下，数据库允许读写，生产环境应设置更严格的规则
+         * - 本示例使用公开数据库，实际应用中应添加用户认证
+         */
+        
+        // 初始数据
+        const initialWebsites = [
+            {
+                id: 1,
+                name: "哔哩哔哩",
+                url: "https://www.bilibili.com",
+                description: "中国年轻一代的标志性品牌及领先的视频社区",
+                category: "娱乐网站",
+                icon: "fab fa-youtube",
+                addedDate: new Date().toISOString()
+            },
+            {
+                id: 2,
+                name: "抖音",
+                url: "https://www.douyin.com",
+                description: "记录美好生活的短视频平台",
+                category: "娱乐网站",
+                icon: "fab fa-tiktok",
+                addedDate: new Date().toISOString()
+            },
+            {
+                id: 3,
+                name: "DeepSeek",
+                url: "https://www.deepseek.com",
+                description: "AI大模型研发与应用平台",
+                category: "AI工具",
+                icon: "fas fa-robot",
+                addedDate: new Date().toISOString()
+            },
+            {
+                id: 4,
+                name: "Kimi",
+                url: "https://kimi.moonshot.cn",
+                description: "智能AI助手，提供问答、写作等服务",
+                category: "AI工具",
+                icon: "fas fa-brain",
+                addedDate: new Date().toISOString()
+            },
+            {
+                id: 5,
+                name: "学习通",
+                url: "https://www.chaoxing.com",
+                description: "在线学习平台，提供课程资源和学习服务",
+                category: "学习平台",
+                icon: "fas fa-graduation-cap",
+                addedDate: new Date().toISOString()
+            },
+            {
+                id: 6,
+                name: "图片处理工具",
+                url: "https://www.photopea.com",
+                description: "在线图片编辑器，类似Photoshop",
+                category: "工具网站",
+                icon: "fas fa-image",
+                addedDate: new Date().toISOString()
+            },
+            {
+                id: 7,
+                name: "压缩工具",
+                url: "https://tinypng.com",
+                description: "智能PNG和JPEG图片压缩工具",
+                category: "工具网站",
+                icon: "fas fa-compress",
+                addedDate: new Date().toISOString()
+            },
+            {
+                id: 8,
+                name: "GitHub",
+                url: "https://github.com",
+                description: "全球最大的代码托管平台",
+                category: "开发相关",
+                icon: "fab fa-github",
+                addedDate: new Date().toISOString()
+            },
+            {
+                id: 9,
+                name: "Figma",
+                url: "https://www.figma.com",
+                description: "协作式界面设计工具",
+                category: "设计工具",
+                icon: "fab fa-figma",
+                addedDate: new Date().toISOString()
+            },
+            {
+                id: 10,
+                name: "壁纸网站",
+                url: "https://wallhaven.cc",
+                description: "高质量壁纸分享社区",
+                category: "娱乐网站",
+                icon: "fas fa-images",
+                addedDate: new Date().toISOString()
+            }
+        ];
+
+        // 可用图标
+        const availableIcons = [
+            "fas fa-globe", "fas fa-link", "fas fa-star", "fas fa-heart", "fas fa-bookmark",
+            "fas fa-rocket", "fas fa-bolt", "fas fa-fire", "fas fa-cloud", "fas fa-cog",
+            "fas fa-home", "fas fa-user", "fas fa-envelope", "fas fa-phone", "fas fa-map-marker-alt",
+            "fas fa-calendar", "fas fa-clock", "fas fa-search", "fas fa-filter", "fas fa-tag",
+            "fas fa-shopping-cart", "fas fa-credit-card", "fas fa-truck", "fas fa-box", "fas fa-gift",
+            "fas fa-chart-line", "fas fa-chart-bar", "fas fa-chart-pie", "fas fa-database", "fas fa-server",
+            "fas fa-code", "fas fa-terminal", "fas fa-laptop-code", "fas fa-mobile-alt", "fas fa-tablet-alt",
+            "fas fa-desktop", "fas fa-keyboard", "fas fa-mouse", "fas fa-headphones", "fas fa-camera",
+            "fas fa-video", "fas fa-microphone", "fas fa-music", "fas fa-film", "fas fa-tv",
+            "fas fa-gamepad", "fas fa-puzzle-piece", "fas fa-paint-brush", "fas fa-palette", "fas fa-pencil-alt",
+            "fas fa-book", "fas fa-newspaper", "fas fa-file-alt", "fas fa-file-pdf", "fas fa-file-word",
+            "fas fa-file-excel", "fas fa-file-powerpoint", "fas fa-file-archive", "fas fa-file-code", "fas fa-file-image",
+            "fab fa-html5", "fab fa-css3-alt", "fab fa-js-square", "fab fa-react", "fab fa-vuejs",
+            "fab fa-angular", "fab fa-node-js", "fab fa-python", "fab fa-java", "fab fa-php",
+            "fab fa-wordpress", "fab fa-drupal", "fab fa-joomla", "fab fa-magento", "fab fa-shopify",
+            "fab fa-chrome", "fab fa-firefox", "fab fa-safari", "fab fa-opera", "fab fa-edge",
+            "fab fa-android", "fab fa-apple", "fab fa-windows", "fab fa-linux", "fab fa-ubuntu",
+            "fab fa-github", "fab fa-gitlab", "fab fa-bitbucket", "fab fa-docker", "fab fa-aws",
+            "fab fa-google", "fab fa-facebook", "fab fa-twitter", "fab fa-instagram", "fab fa-linkedin",
+            "fab fa-youtube", "fab fa-vimeo", "fab fa-twitch", "fab fa-tiktok", "fab fa-discord",
+            "fab fa-slack", "fab fa-telegram", "fab fa-whatsapp", "fab fa-skype", "fab fa-microsoft"
+        ];
+
+        // 全局变量
+        let websites = [];
+        let categories = [];
+        let activeCategory = "全部";
+        let editingWebsiteId = null;
+        let draggedElement = null;
+        let firebaseStatus = 'connecting'; // connecting, connected, disconnected
+        
+        // 数据版本
+        const DATA_VERSION = "1.0";
+
+        // Firebase配置
+        // 注意：在实际使用中，请将以下配置替换为您自己的Firebase项目配置
+        // 您可以在Firebase控制台的"项目设置"中找到这些配置信息
+        const firebaseConfig = {
+            apiKey: "AIzaSyBqK5X2YwzZzZzZzZzZzZzZzZzZzZzZzZz",
+            authDomain: "bookmark-navigator.firebaseapp.com",
+            databaseURL: "https://bookmark-navigator-default-rtdb.firebaseio.com",
+            projectId: "bookmark-navigator",
+            storageBucket: "bookmark-navigator.appspot.com",
+            messagingSenderId: "123456789",
+            appId: "1:123456789:web:abcdef123456"
+        };
+        
+        // 如果您想使用自己的Firebase项目，请按照以下步骤操作：
+        // 1. 访问 https://console.firebase.google.com/
+        // 2. 创建新项目或选择现有项目
+        // 3. 在项目设置中找到您的配置信息
+        // 4. 将上面的配置替换为您自己的配置
+        // 5. 确保在Firebase控制台中启用了Realtime Database
+
+        // DOM元素
+        const categoriesEl = document.getElementById('categories');
+        const mainContentEl = document.getElementById('mainContent');
+        const websiteModal = document.getElementById('websiteModal');
+        const importModal = document.getElementById('importModal');
+        const importDataModal = document.getElementById('importDataModal');
+        const websiteForm = document.getElementById('websiteForm');
+        const modalTitle = document.getElementById('modalTitle');
+        const websiteIdInput = document.getElementById('websiteId');
+        const websiteNameInput = document.getElementById('websiteName');
+        const websiteUrlInput = document.getElementById('websiteUrl');
+        const websiteDescriptionInput = document.getElementById('websiteDescription');
+        const websiteCategorySelect = document.getElementById('websiteCategory');
+        const iconSelector = document.getElementById('iconSelector');
+        const dataFileInput = document.getElementById('dataFile');
+        const importDataLog = document.getElementById('importDataLog');
+        const firebaseStatusEl = document.getElementById('firebaseStatus');
+
+        // 初始化Firebase
+        let firebaseApp, database, websitesRef;
+
+        function initFirebase() {
+            try {
+                // 初始化Firebase应用
+                firebaseApp = firebase.initializeApp(firebaseConfig);
+                
+                // 获取数据库引用
+                database = firebaseApp.database();
+                websitesRef = database.ref('websites');
+                
+                // 监听连接状态
+                firebaseApp.database().ref('.info/connected').on('value', (snapshot) => {
+                    const connected = snapshot.val();
+                    if (connected) {
+                        updateFirebaseStatus('connected');
+                        console.log('Firebase连接成功');
+                    } else {
+                        updateFirebaseStatus('disconnected');
+                        console.log('Firebase连接断开');
+                    }
+                });
+                
+                // 监听数据变化 - 实时同步功能
+                websitesRef.on('value', (snapshot) => {
+                    const data = snapshot.val();
+                    if (data) {
+                        // 将Firebase对象转换为数组
+                        websites = Object.keys(data).map(key => ({
+                            id: parseInt(key),
+                            ...data[key]
+                        }));
+                        
+                        // 提取分类
+                        extractCategories();
+                        
+                        // 重新渲染界面
+                        renderCategories();
+                        renderWebsites();
+                        renderCategorySelect();
+                        
+                        console.log('数据已从Firebase同步');
+                    } else {
+                        // 如果没有数据，使用初始数据
+                        console.log('Firebase中没有数据，使用初始数据');
+                        initializeData();
+                    }
+                }, (error) => {
+                    console.error("Firebase读取数据失败:", error);
+                    updateFirebaseStatus('disconnected');
+                    showNotification('连接数据库失败，请检查网络连接', 'error');
+                });
+                
+                return true;
+            } catch (error) {
+                console.error("Firebase初始化失败:", error);
+                updateFirebaseStatus('disconnected');
+                showNotification('初始化数据库失败，请刷新页面重试', 'error');
+                return false;
+            }
+        }
+
+        // 更新Firebase连接状态
+        function updateFirebaseStatus(status) {
+            firebaseStatus = status;
+            const statusEl = document.getElementById('firebaseStatus');
+            
+            // 移除所有状态类
+            statusEl.classList.remove('connected', 'disconnected', 'connecting');
+            
+            // 添加新状态类
+            statusEl.classList.add(status);
+            
+            // 更新文本
+            switch(status) {
+                case 'connected':
+                    statusEl.innerHTML = '<i class="fas fa-circle"></i><span>已连接</span>';
+                    break;
+                case 'disconnected':
+                    statusEl.innerHTML = '<i class="fas fa-circle"></i><span>连接断开</span>';
+                    break;
+                case 'connecting':
+                    statusEl.innerHTML = '<i class="fas fa-circle"></i><span>连接中...</span>';
+                    break;
+            }
+        }
+
+        // 初始化数据
+        function initializeData() {
+            // 使用初始数据
+            websites = [...initialWebsites];
+            
+            // 保存到Firebase
+            saveToFirebase();
+            
+            // 提取分类
+            extractCategories();
+            
+            // 渲染界面
+            renderCategories();
+            renderWebsites();
+            renderCategorySelect();
+        }
+
+        // 保存数据到Firebase
+        function saveToFirebase() {
+            if (!websitesRef) {
+                console.error('Firebase引用未初始化');
+                return;
+            }
+            
+            // 将数组转换为对象，以id为键
+            const websitesObject = {};
+            websites.forEach(website => {
+                websitesObject[website.id] = {
+                    name: website.name,
+                    url: website.url,
+                    description: website.description,
+                    category: website.category,
+                    icon: website.icon,
+                    addedDate: website.addedDate
+                };
+            });
+            
+            // 保存到Firebase
+            websitesRef.set(websitesObject)
+                .then(() => {
+                    console.log("数据已保存到Firebase");
+                    // 显示保存成功通知
+                    showNotification('数据已同步到云端', 'success');
+                })
+                .catch((error) => {
+                    console.error("保存到Firebase失败:", error);
+                    showNotification('保存数据失败，请检查网络连接', 'error');
+                });
+        }
+
+        // 初始化应用
+        function init() {
+            console.log('正在初始化应用...');
+            
+            // 初始化Firebase
+            if (initFirebase()) {
+                console.log('Firebase初始化成功');
+                
+                // 渲染图标选择器
+                renderIconSelector();
+                
+                // 绑定事件
+                bindEvents();
+                
+                console.log('应用初始化完成');
+            } else {
+                console.error('应用初始化失败');
+            }
+        }
+
+        // 提取所有分类
+        function extractCategories() {
+            const categorySet = new Set();
+            websites.forEach(website => {
+                categorySet.add(website.category);
+            });
+            categories = Array.from(categorySet);
+        }
+
+        // 渲染分类标签
+        function renderCategories() {
+            categoriesEl.innerHTML = '';
+            
+            // 添加"全部"标签
+            const allTag = document.createElement('div');
+            allTag.className = `category-tag ${activeCategory === '全部' ? 'active' : ''}`;
+            allTag.textContent = '全部';
+            allTag.addEventListener('click', () => {
+                activeCategory = '全部';
+                renderCategories();
+                renderWebsites();
+            });
+            categoriesEl.appendChild(allTag);
+            
+            // 添加其他分类标签
+            categories.forEach(category => {
+                const tag = document.createElement('div');
+                tag.className = `category-tag ${activeCategory === category ? 'active' : ''}`;
+                tag.textContent = category;
+                tag.addEventListener('click', () => {
+                    activeCategory = category;
+                    renderCategories();
+                    renderWebsites();
+                });
+                categoriesEl.appendChild(tag);
+            });
+        }
+
+        // 渲染网站卡片
+        function renderWebsites() {
+            mainContentEl.innerHTML = '';
+            
+            // 过滤网站
+            const filteredWebsites = activeCategory === '全部' 
+                ? websites 
+                : websites.filter(website => website.category === activeCategory);
+            
+            // 按分类分组
+            const groupedWebsites = {};
+            filteredWebsites.forEach(website => {
+                if (!groupedWebsites[website.category]) {
+                    groupedWebsites[website.category] = [];
+                }
+                groupedWebsites[website.category].push(website);
+            });
+            
+            // 如果没有网站，显示空状态
+            if (Object.keys(groupedWebsites).length === 0) {
+                const emptyState = document.createElement('div');
+                emptyState.className = 'empty-state';
+                emptyState.innerHTML = `
+                    <i class="fas fa-bookmark"></i>
+                    <p>暂无网站</p>
+                    <button class="btn btn-primary" id="emptyAddBtn">
+                        <i class="fas fa-plus"></i>
+                        <span>添加网站</span>
+                    </button>
+                `;
+                mainContentEl.appendChild(emptyState);
+                
+                // 绑定空状态添加按钮事件
+                document.getElementById('emptyAddBtn').addEventListener('click', () => {
+                    openAddModal();
+                });
+                
+                return;
+            }
+            
+            // 渲染每个分类的网站
+            Object.keys(groupedWebsites).forEach(category => {
+                const section = document.createElement('div');
+                section.className = 'category-section';
+                
+                const header = document.createElement('div');
+                header.className = 'category-header';
+                
+                const title = document.createElement('h2');
+                title.className = 'category-title';
+                title.innerHTML = `<i class="fas fa-folder"></i> ${category}`;
+                
+                header.appendChild(title);
+                section.appendChild(header);
+                
+                const grid = document.createElement('div');
+                grid.className = 'website-grid';
+                
+                groupedWebsites[category].forEach(website => {
+                    const card = createWebsiteCard(website);
+                    grid.appendChild(card);
+                });
+                
+                section.appendChild(grid);
+                mainContentEl.appendChild(section);
+            });
+        }
+
+        // 创建网站卡片
+        function createWebsiteCard(website) {
+            const card = document.createElement('div');
+            card.className = 'website-card';
+            card.dataset.id = website.id;
+            card.draggable = true;
+            
+            const header = document.createElement('div');
+            header.className = 'website-header';
+            
+            const icon = document.createElement('div');
+            icon.className = 'website-icon';
+            
+            if (website.icon.startsWith('http')) {
+                const img = document.createElement('img');
+                img.src = website.icon;
+                img.alt = website.name;
+                icon.appendChild(img);
+            } else {
+                const i = document.createElement('i');
+                i.className = website.icon;
+                icon.appendChild(i);
+            }
+            
+            const name = document.createElement('div');
+            name.className = 'website-name';
+            name.textContent = website.name;
+            
+            const actions = document.createElement('div');
+            actions.className = 'website-actions';
+            
+            const editBtn = document.createElement('div');
+            editBtn.className = 'action-btn edit';
+            editBtn.innerHTML = '<i class="fas fa-edit"></i>';
+            editBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                openEditModal(website.id);
+            });
+            
+            const deleteBtn = document.createElement('div');
+            deleteBtn.className = 'action-btn delete';
+            deleteBtn.innerHTML = '<i class="fas fa-trash"></i>';
+            deleteBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                deleteWebsite(website.id);
+            });
+            
+            actions.appendChild(editBtn);
+            actions.appendChild(deleteBtn);
+            
+            header.appendChild(icon);
+            header.appendChild(name);
+            header.appendChild(actions);
+            
+            const description = document.createElement('div');
+            description.className = 'website-description';
+            description.textContent = website.description;
+            
+            const url = document.createElement('div');
+            url.className = 'website-url';
+            url.innerHTML = `<i class="fas fa-link"></i> ${website.url}`;
+            
+            card.appendChild(header);
+            card.appendChild(description);
+            card.appendChild(url);
+            
+            // 添加点击事件，打开网站
+            card.addEventListener('click', () => {
+                window.open(website.url, '_blank');
+            });
+            
+            // 添加拖拽事件
+            card.addEventListener('dragstart', handleDragStart);
+            card.addEventListener('dragover', handleDragOver);
+            card.addEventListener('drop', handleDrop);
+            card.addEventListener('dragend', handleDragEnd);
+            
+            return card;
+        }
+
+        // 渲染图标选择器
+        function renderIconSelector() {
+            iconSelector.innerHTML = '';
+            
+            availableIcons.forEach(iconClass => {
+                const option = document.createElement('div');
+                option.className = 'icon-option';
+                option.innerHTML = `<i class="${iconClass}"></i>`;
+                option.addEventListener('click', () => {
+                    // 移除其他选中状态
+                    document.querySelectorAll('.icon-option').forEach(opt => {
+                        opt.classList.remove('selected');
+                    });
+                    // 添加选中状态
+                    option.classList.add('selected');
+                });
+                iconSelector.appendChild(option);
+            });
+        }
+
+        // 渲染分类选择器
+        function renderCategorySelect() {
+            websiteCategorySelect.innerHTML = '';
+            
+            categories.forEach(category => {
+                const option = document.createElement('option');
+                option.value = category;
+                option.textContent = category;
+                websiteCategorySelect.appendChild(option);
+            });
+        }
+
+        // 绑定事件
+        function bindEvents() {
+            // 添加网站按钮
+            document.getElementById('addBtn').addEventListener('click', openAddModal);
+            
+            // 导入书签按钮
+            document.getElementById('importBtn').addEventListener('click', openImportModal);
+            
+            // 导出数据按钮
+            document.getElementById('exportDataBtn').addEventListener('click', exportData);
+            
+            // 导入数据按钮
+            document.getElementById('importDataBtn').addEventListener('click', openImportDataModal);
+            
+            // 模态框关闭按钮
+            document.getElementById('modalClose').addEventListener('click', closeWebsiteModal);
+            document.getElementById('importModalClose').addEventListener('click', closeImportModal);
+            
+            // 取消按钮
+            document.getElementById('cancelBtn').addEventListener('click', closeWebsiteModal);
+            document.getElementById('importCancelBtn').addEventListener('click', closeImportModal);
+            document.getElementById('importDataCancelBtn').addEventListener('click', closeImportDataModal);
+            
+            // 导入数据保存按钮
+            document.getElementById('importDataSaveBtn').addEventListener('click', importData);
+            
+            // 保存按钮
+            document.getElementById('saveBtn').addEventListener('click', saveWebsite);
+            document.getElementById('importSaveBtn').addEventListener('click', importBookmarks);
+            
+            // 点击模态框外部关闭
+            websiteModal.addEventListener('click', (e) => {
+                if (e.target === websiteModal) {
+                    closeWebsiteModal();
+                }
+            });
+            
+            importModal.addEventListener('click', (e) => {
+                if (e.target === importModal) {
+                    closeImportModal();
+                }
+            });
+            
+            importDataModal.addEventListener('click', (e) => {
+                if (e.target === importDataModal) {
+                    closeImportDataModal();
+                }
+            });
+            
+            // 文件选择变化时
+            dataFileInput.addEventListener('change', (e) => {
+                if (e.target.files.length > 0) {
+                    const file = e.target.files[0];
+                    addLogEntry(`已选择文件: ${file.name} (${formatFileSize(file.size)})`, 'info');
+                }
+            });
+            
+            // URL输入变化时，尝试获取favicon
+            websiteUrlInput.addEventListener('input', () => {
+                const url = websiteUrlInput.value.trim();
+                if (url && isValidUrl(url)) {
+                    // 尝试获取favicon
+                    try {
+                        const domain = new URL(url).origin;
+                        const faviconUrl = `${domain}/favicon.ico`;
+                        
+                        // 检查是否已有自定义图标选项
+                        let customIcon = document.querySelector('.icon-option.custom-favicon');
+                        
+                        if (!customIcon) {
+                            // 创建自定义图标选项
+                            customIcon = document.createElement('div');
+                            customIcon.className = 'icon-option custom-favicon';
+                            customIcon.innerHTML = '<i class="fas fa-globe"></i>';
+                            customIcon.addEventListener('click', () => {
+                                // 移除其他选中状态
+                                document.querySelectorAll('.icon-option').forEach(opt => {
+                                    opt.classList.remove('selected');
+                                });
+                                // 添加选中状态
+                                customIcon.classList.add('selected');
+                            });
+                            iconSelector.insertBefore(customIcon, iconSelector.firstChild);
+                        }
+                        
+                        // 更新图标
+                        customIcon.innerHTML = `<img src="${faviconUrl}" alt="Favicon" onerror="this.parentElement.innerHTML='<i class=\\'fas fa-globe\\'></i>'">`;
+                    } catch (e) {
+                        console.error('Error parsing URL:', e);
+                    }
+                }
+            });
+        }
+
+        // 打开添加网站模态框
+        function openAddModal() {
+            editingWebsiteId = null;
+            modalTitle.textContent = '添加网站';
+            websiteForm.reset();
+            
+            // 重置图标选择
+            document.querySelectorAll('.icon-option').forEach(opt => {
+                opt.classList.remove('selected');
+            });
+            
+            // 默认选中第一个图标
+            if (document.querySelector('.icon-option')) {
+                document.querySelector('.icon-option').classList.add('selected');
+            }
+            
+            websiteModal.classList.add('active');
+        }
+
+        // 打开编辑网站模态框
+        function openEditModal(id) {
+            const website = websites.find(w => w.id === id);
+            if (!website) return;
+            
+            editingWebsiteId = id;
+            modalTitle.textContent = '编辑网站';
+            
+            websiteIdInput.value = website.id;
+            websiteNameInput.value = website.name;
+            websiteUrlInput.value = website.url;
+            websiteDescriptionInput.value = website.description;
+            websiteCategorySelect.value = website.category;
+            
+            // 重置图标选择
+            document.querySelectorAll('.icon-option').forEach(opt => {
+                opt.classList.remove('selected');
+            });
+            
+            // 选中当前图标
+            if (website.icon.startsWith('http')) {
+                // 如果是URL图标，查找自定义图标选项
+                const customIcon = document.querySelector('.icon-option.custom-favicon');
+                if (customIcon) {
+                    customIcon.innerHTML = `<img src="${website.icon}" alt="Favicon">`;
+                    customIcon.classList.add('selected');
+                }
+            } else {
+                // 如果是FontAwesome图标，查找对应的选项
+                const iconOption = document.querySelector(`.icon-option i.${website.icon.replace(' ', '.')}`);
+                if (iconOption) {
+                    iconOption.parentElement.classList.add('selected');
+                }
+            }
+            
+            websiteModal.classList.add('active');
+        }
+
+        // 关闭网站模态框
+        function closeWebsiteModal() {
+            websiteModal.classList.remove('active');
+            websiteForm.reset();
+        }
+
+        // 打开导入书签模态框
+        function openImportModal() {
+            importModal.classList.add('active');
+        }
+
+        // 关闭导入书签模态框
+        function closeImportModal() {
+            importModal.classList.remove('active');
+            document.getElementById('bookmarkFile').value = '';
+            document.getElementById('bookmarkText').value = '';
+        }
+        
+        // 打开导入数据模态框
+        function openImportDataModal() {
+            importDataModal.classList.add('active');
+            dataFileInput.value = '';
+            importDataLog.innerHTML = '';
+            importDataLog.classList.remove('active');
+        }
+        
+        // 关闭导入数据模态框
+        function closeImportDataModal() {
+            importDataModal.classList.remove('active');
+            dataFileInput.value = '';
+            importDataLog.innerHTML = '';
+            importDataLog.classList.remove('active');
+        }
+        
+        // 导出数据
+        function exportData() {
+            try {
+                // 创建数据对象
+                const data = {
+                    version: DATA_VERSION,
+                    exportDate: new Date().toISOString(),
+                    websites: websites
+                };
+                
+                // 转换为JSON字符串
+                const jsonString = JSON.stringify(data, null, 2);
+                
+                // 创建Blob对象
+                const blob = new Blob([jsonString], { type: 'application/json' });
+                
+                // 创建下载链接
+                const url = URL.createObjectURL(blob);
+                
+                // 创建下载按钮并触发点击
+                const a = document.createElement('a');
+                a.href = url;
+                
+                // 生成文件名（包含当前日期时间）
+                const now = new Date();
+                const dateStr = now.toISOString().replace(/[:.]/g, '-').slice(0, -5);
+                a.download = `bookmark-navigator-${dateStr}.json`;
+                
+                document.body.appendChild(a);
+                a.click();
+                
+                // 清理
+                setTimeout(() => {
+                    document.body.removeChild(a);
+                    URL.revokeObjectURL(url);
+                }, 100);
+                
+                // 显示成功提示
+                showNotification('数据导出成功！', 'success');
+            } catch (error) {
+                console.error('导出数据失败:', error);
+                showNotification('导出数据失败，请重试', 'error');
+            }
+        }
+        
+        // 导入数据
+        function importData() {
+            const file = dataFileInput.files[0];
+            
+            if (!file) {
+                addLogEntry('请选择要导入的数据文件', 'error');
+                return;
+            }
+            
+            // 检查文件类型
+            if (file.type !== 'application/json' && !file.name.endsWith('.json')) {
+                addLogEntry('请选择JSON格式的数据文件', 'error');
+                return;
+            }
+            
+            // 读取文件
+            const reader = new FileReader();
+            
+            reader.onload = function(e) {
+                try {
+                    // 解析JSON数据
+                    const data = JSON.parse(e.target.result);
+                    
+                    // 验证数据格式
+                    if (!validateImportData(data)) {
+                        addLogEntry('数据格式不正确或版本不兼容', 'error');
+                        return;
+                    }
+                    
+                    // 确认导入
+                    if (confirm(`确定要导入数据吗？这将替换当前所有书签数据。\n\n导入数据包含 ${data.websites.length} 个网站。`)) {
+                        // 更新数据
+                        websites = data.websites;
+                        
+                        // 保存到Firebase
+                        saveToFirebase();
+                        
+                        // 关闭模态框
+                        closeImportDataModal();
+                        
+                        // 显示成功提示
+                        showNotification(`成功导入 ${data.websites.length} 个网站`, 'success');
+                    }
+                } catch (error) {
+                    console.error('解析数据失败:', error);
+                    addLogEntry('解析数据失败: ' + error.message, 'error');
+                }
+            };
+            
+            reader.onerror = function() {
+                addLogEntry('读取文件失败', 'error');
+            };
+            
+            // 开始读取文件
+            reader.readAsText(file);
+        }
+        
+        // 验证导入数据
+        function validateImportData(data) {
+            // 检查基本结构
+            if (!data || typeof data !== 'object') {
+                addLogEntry('数据格式错误: 不是有效的对象', 'error');
+                return false;
+            }
+            
+            // 检查版本（如果有）
+            if (data.version && data.version !== DATA_VERSION) {
+                addLogEntry(`版本不兼容: 文件版本 ${data.version}, 当前版本 ${DATA_VERSION}`, 'error');
+                return false;
+            }
+            
+            // 检查网站数据
+            if (!Array.isArray(data.websites)) {
+                addLogEntry('数据格式错误: 缺少网站数组', 'error');
+                return false;
+            }
+            
+            // 检查每个网站的基本字段
+            for (let i = 0; i < data.websites.length; i++) {
+                const website = data.websites[i];
+                
+                if (!website.id || !website.name || !website.url || !website.category) {
+                    addLogEntry(`网站数据不完整: ${website.name || '未知网站'}`, 'error');
+                    return false;
+                }
+                
+                // 验证URL格式
+                if (!isValidUrl(website.url)) {
+                    addLogEntry(`无效的URL: ${website.url}`, 'error');
+                    return false;
+                }
+            }
+            
+            addLogEntry('数据验证通过', 'success');
+            return true;
+        }
+        
+        // 添加日志条目
+        function addLogEntry(message, type = 'info') {
+            importDataLog.classList.add('active');
+            
+            const entry = document.createElement('div');
+            entry.className = `log-entry ${type}`;
+            entry.textContent = `[${new Date().toLocaleTimeString()}] ${message}`;
+            
+            importDataLog.appendChild(entry);
+            
+            // 滚动到底部
+            importDataLog.scrollTop = importDataLog.scrollHeight;
+        }
+        
+        // 显示通知
+        function showNotification(message, type = 'info') {
+            // 创建通知元素
+            const notification = document.createElement('div');
+            notification.className = `notification notification-${type}`;
+            notification.textContent = message;
+            
+            // 添加样式
+            notification.style.position = 'fixed';
+            notification.style.top = '20px';
+            notification.style.right = '20px';
+            notification.style.padding = '12px 20px';
+            notification.style.borderRadius = '5px';
+            notification.style.boxShadow = '0 4px 12px rgba(0, 0, 0, 0.15)';
+            notification.style.zIndex = '9999';
+            notification.style.minWidth = '250px';
+            notification.style.maxWidth = '400px';
+            notification.style.opacity = '0';
+            notification.style.transform = 'translateY(-20px)';
+            notification.style.transition = 'opacity 0.3s, transform 0.3s';
+            
+            // 根据类型设置颜色
+            switch (type) {
+                case 'success':
+                    notification.style.backgroundColor = '#d4edda';
+                    notification.style.color = '#155724';
+                    break;
+                case 'error':
+                    notification.style.backgroundColor = '#f8d7da';
+                    notification.style.color = '#721c24';
+                    break;
+                case 'warning':
+                    notification.style.backgroundColor = '#fff3cd';
+                    notification.style.color = '#856404';
+                    break;
+                default:
+                    notification.style.backgroundColor = '#d1ecf1';
+                    notification.style.color = '#0c5460';
+            }
+            
+            // 添加到页面
+            document.body.appendChild(notification);
+            
+            // 显示动画
+            setTimeout(() => {
+                notification.style.opacity = '1';
+                notification.style.transform = 'translateY(0)';
+            }, 10);
+            
+            // 自动关闭
+            setTimeout(() => {
+                notification.style.opacity = '0';
+                notification.style.transform = 'translateY(-20px)';
+                
+                setTimeout(() => {
+                    document.body.removeChild(notification);
+                }, 300);
+            }, 3000);
+        }
+        
+        // 格式化文件大小
+        function formatFileSize(bytes) {
+            if (bytes === 0) return '0 Bytes';
+            
+            const k = 1024;
+            const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+        }
+
+        // 保存网站
+        function saveWebsite() {
+            const name = websiteNameInput.value.trim();
+            const url = websiteUrlInput.value.trim();
+            const description = websiteDescriptionInput.value.trim();
+            const category = websiteCategorySelect.value;
+            
+            if (!name || !url || !category) {
+                alert('请填写必填项');
+                return;
+            }
+            
+            if (!isValidUrl(url)) {
+                alert('请输入有效的URL');
+                return;
+            }
+            
+            // 获取选中的图标
+            const selectedIcon = document.querySelector('.icon-option.selected');
+            let icon = '';
+            
+            if (selectedIcon) {
+                const img = selectedIcon.querySelector('img');
+                if (img) {
+                    icon = img.src;
+                } else {
+                    const i = selectedIcon.querySelector('i');
+                    if (i) {
+                        icon = i.className;
+                    }
+                }
+            }
+            
+            // 如果没有选中图标，使用默认图标
+            if (!icon) {
+                icon = 'fas fa-globe';
+            }
+            
+            if (editingWebsiteId) {
+                // 编辑现有网站
+                const index = websites.findIndex(w => w.id === editingWebsiteId);
+                if (index !== -1) {
+                    websites[index] = {
+                        ...websites[index],
+                        name,
+                        url,
+                        description,
+                        category,
+                        icon
+                    };
+                }
+            } else {
+                // 添加新网站
+                const newWebsite = {
+                    id: Date.now(),
+                    name,
+                    url,
+                    description,
+                    category,
+                    icon,
+                    addedDate: new Date().toISOString()
+                };
+                websites.push(newWebsite);
+            }
+            
+            // 保存到Firebase
+            saveToFirebase();
+            
+            // 关闭模态框
+            closeWebsiteModal();
+        }
+
+        // 删除网站
+        function deleteWebsite(id) {
+            if (confirm('确定要删除这个网站吗？')) {
+                websites = websites.filter(w => w.id !== id);
+                
+                // 保存到Firebase
+                saveToFirebase();
+            }
+        }
+
+        // 导入书签
+        function importBookmarks() {
+            const fileInput = document.getElementById('bookmarkFile');
+            const bookmarkText = document.getElementById('bookmarkText').value.trim();
+            
+            if (fileInput.files.length > 0) {
+                // 从文件导入
+                const file = fileInput.files[0];
+                const reader = new FileReader();
+                
+                reader.onload = function(e) {
+                    const content = e.target.result;
+                    parseBookmarks(content);
+                };
+                
+                reader.readAsText(file);
+            } else if (bookmarkText) {
+                // 从文本导入
+                parseBookmarks(bookmarkText);
+            } else {
+                alert('请选择文件或输入HTML代码');
+                return;
+            }
+        }
+
+        // 解析书签HTML
+        function parseBookmarks(html) {
+            try {
+                const parser = new DOMParser();
+                const doc = parser.parseFromString(html, 'text/html');
+                
+                // 查找所有书签链接
+                const links = doc.querySelectorAll('a');
+                
+                if (links.length === 0) {
+                    alert('未找到书签链接');
+                    return;
+                }
+                
+                let importedCount = 0;
+                
+                links.forEach(link => {
+                    const url = link.getAttribute('href');
+                    const name = link.textContent;
+                    
+                    if (url && name && isValidUrl(url)) {
+                        // 检查是否已存在
+                        const exists = websites.some(w => w.url === url);
+                        
+                        if (!exists) {
+                            // 获取图标
+                            let icon = 'fas fa-globe';
+                            try {
+                                const domain = new URL(url).origin;
+                                icon = `${domain}/favicon.ico`;
+                            } catch (e) {
+                                console.error('Error parsing URL:', e);
+                            }
+                            
+                            // 确定分类
+                            let category = '其他';
+                            
+                            // 根据URL或名称推断分类
+                            if (url.includes('bilibili') || url.includes('douyin') || url.includes('youtube') || url.includes('netflix')) {
+                                category = '娱乐网站';
+                            } else if (url.includes('github') || url.includes('stackoverflow') || url.includes('codepen')) {
+                                category = '开发相关';
+                            } else if (url.includes('photopea') || url.includes('tinypng') || url.includes('convert')) {
+                                category = '工具网站';
+                            } else if (url.includes('chaoxing') || url.includes('mooc') || url.includes('coursera')) {
+                                category = '学习平台';
+                            } else if (url.includes('deepseek') || url.includes('kimi') || url.includes('chatgpt')) {
+                                category = 'AI工具';
+                            } else if (url.includes('figma') || url.includes('canva') || url.includes('adobe')) {
+                                category = '设计工具';
+                            }
+                            
+                            // 添加新网站
+                            const newWebsite = {
+                                id: Date.now() + importedCount,
+                                name,
+                                url,
+                                description: `从书签导入的网站`,
+                                category,
+                                icon,
+                                addedDate: new Date().toISOString()
+                            };
+                            
+                            websites.push(newWebsite);
+                            importedCount++;
+                        }
+                    }
+                });
+                
+                if (importedCount > 0) {
+                    // 保存到Firebase
+                    saveToFirebase();
+                    
+                    // 关闭模态框
+                    closeImportModal();
+                    
+                    alert(`成功导入 ${importedCount} 个书签`);
+                } else {
+                    alert('没有导入新的书签，可能所有书签已存在');
+                }
+            } catch (e) {
+                console.error('Error parsing bookmarks:', e);
+                alert('解析书签失败，请检查HTML格式');
+            }
+        }
+
+        // 验证URL
+        function isValidUrl(string) {
+            try {
+                new URL(string);
+                return true;
+            } catch (_) {
+                return false;
+            }
+        }
+
+        // 拖拽功能
+        function handleDragStart(e) {
+            draggedElement = this;
+            this.classList.add('dragging');
+            e.dataTransfer.effectAllowed = 'move';
+            e.dataTransfer.setData('text/html', this.innerHTML);
+        }
+
+        function handleDragOver(e) {
+            if (e.preventDefault) {
+                e.preventDefault();
+            }
+            e.dataTransfer.dropEffect = 'move';
+            
+            const afterElement = getDragAfterElement(e.currentTarget.parentNode, e.clientY);
+            if (afterElement == null) {
+                e.currentTarget.parentNode.appendChild(draggedElement);
+            } else {
+                e.currentTarget.parentNode.insertBefore(draggedElement, afterElement);
+            }
+            
+            return false;
+        }
+
+        function handleDrop(e) {
+            if (e.stopPropagation) {
+                e.stopPropagation();
+            }
+            
+            // 更新数据顺序
+            const cards = Array.from(document.querySelectorAll('.website-card'));
+            const newOrder = cards.map(card => parseInt(card.dataset.id));
+            
+            // 重新排序网站数组
+            const reorderedWebsites = [];
+            newOrder.forEach(id => {
+                const website = websites.find(w => w.id === id);
+                if (website) {
+                    reorderedWebsites.push(website);
+                }
+            });
+            
+            // 添加不在当前视图中的网站
+            websites.forEach(website => {
+                if (!newOrder.includes(website.id)) {
+                    reorderedWebsites.push(website);
+                }
+            });
+            
+            websites = reorderedWebsites;
+            
+            // 保存到Firebase
+            saveToFirebase();
+            
+            return false;
+        }
+
+        function handleDragEnd(e) {
+            this.classList.remove('dragging');
+            
+            const cards = document.querySelectorAll('.website-card');
+            cards.forEach(card => {
+                card.classList.remove('drag-over');
+            });
+        }
+
+        function getDragAfterElement(container, y) {
+            const draggableElements = [...container.querySelectorAll('.website-card:not(.dragging)')];
+            
+            return draggableElements.reduce((closest, child) => {
+                const box = child.getBoundingClientRect();
+                const offset = y - box.top - box.height / 2;
+                
+                if (offset < 0 && offset > closest.offset) {
+                    return { offset: offset, element: child };
+                } else {
+                    return closest;
+                }
+            }, { offset: Number.NEGATIVE_INFINITY }).element;
+        }
+
+        // 初始化应用
+        init();
+    </script>
+</body>
+</html>
