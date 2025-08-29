@@ -1,21 +1,21 @@
 
-<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-    <link rel="icon" href="https://cdn.icon-icons.com/icons2/1160/PNG/512/1491580676-jd11177_82573.png" type="image/png">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>我的导航网页</title>
+    <title>极简导航</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <!-- 简约风格的网站图标 - 采用更简洁的导航图标 -->
+    <link rel="icon" href="https://cdn-icons-png.flaticon.com/512/684/684908.png" type="image/png">
     <script>
         tailwind.config = {
             theme: {
                 extend: {
                     colors: {
-                        primary: '#4F46E5', // 深紫蓝色作为主色调，更显专业
+                        primary: '#4F46E5', // 更现代的靛蓝色作为主色调
                         secondary: '#10B981',
-                        accent: '#EC4899',
+                        accent: '#8B5CF6',
                         dark: '#1E293B',
                         light: '#F8FAFC'
                     },
@@ -23,8 +23,8 @@
                         sans: ['Inter', 'system-ui', 'sans-serif'],
                     },
                     boxShadow: {
-                        'card': '0 4px 20px rgba(0, 0, 0, 0.08)',
-                        'card-hover': '0 10px 30px rgba(0, 0, 0, 0.12)',
+                        'card': '0 4px 12px rgba(0, 0, 0, 0.05)',
+                        'card-hover': '0 10px 25px rgba(79, 70, 229, 0.1)',
                     }
                 }
             }
@@ -36,13 +36,13 @@
                 @apply transition-all duration-300 hover:shadow-card-hover hover:-translate-y-1;
             }
             .category-title {
-                @apply text-xl font-bold mb-6 flex items-center gap-2 relative pl-1 before:absolute before:left-0 before:top-0 before:bottom-0 before:w-1 before:rounded-full;
+                @apply text-xl font-bold mb-6 flex items-center gap-2 text-dark relative pl-1 before:absolute before:left-0 before:top-0 before:bottom-0 before:w-1.5 before:rounded-full;
             }
             .site-card {
-                @apply bg-white rounded-xl shadow-card p-5 mb-4 card-hover border border-gray-100;
+                @apply bg-white rounded-xl shadow-card p-5 mb-4 card-hover border border-gray-50;
             }
             .favicon {
-                @apply w-8 h-8 rounded-md mr-3 flex-shrink-0 object-cover;
+                @apply w-10 h-10 rounded-lg mr-4 flex-shrink-0 flex items-center justify-center text-lg;
             }
             .section-fade-in {
                 @apply opacity-0 translate-y-6 transition-all duration-700 ease-out;
@@ -50,23 +50,26 @@
             .section-visible {
                 @apply opacity-100 translate-y-0;
             }
+            .gradient-bg {
+                @apply bg-gradient-to-r from-primary to-accent;
+            }
         }
     </style>
 </head>
-<body class="bg-gray-50 min-h-screen font-sans">
+<body class="bg-gray-50 min-h-screen font-sans text-gray-800">
     <!-- 顶部导航栏 -->
-    <header class="sticky top-0 z-50 bg-white/90 backdrop-blur-sm shadow-sm transition-all duration-300">
-        <div class="container mx-auto px-4 py-4 flex justify-between items-center">
-            <div class="flex items-center gap-2">
-                <i class="fa fa-compass text-primary text-2xl"></i>
-                <h1 class="text-xl md:text-2xl font-bold text-dark">我的导航网页</h1>
+    <header class="sticky top-0 z-50 bg-white/95 backdrop-blur-sm shadow-sm transition-all duration-300">
+        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+            <div class="flex items-center gap-2 cursor-pointer" id="logo">
+                <i class="fa fa-compass text-primary text-xl"></i>
+                <h1 class="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary to-accent">极简导航</h1>
             </div>
-            <div class="flex items-center gap-4">
-                <button id="importBtn" class="hidden md:flex items-center gap-2 bg-primary/10 hover:bg-primary/20 text-primary px-4 py-2 rounded-lg transition-colors">
+            <div class="flex items-center gap-3">
+                <button id="importBtn" class="hidden md:flex items-center gap-2 bg-primary/10 hover:bg-primary/20 text-primary px-3 py-1.5 rounded-lg transition-all text-sm">
                     <i class="fa fa-upload"></i>
                     <span>导入收藏夹</span>
                 </button>
-                <button id="searchBtn" class="p-2 text-gray-600 hover:text-primary hover:bg-gray-100 rounded-full transition-colors">
+                <button id="searchBtn" class="p-2 text-gray-600 hover:text-primary hover:bg-primary/5 rounded-full transition-all">
                     <i class="fa fa-search"></i>
                 </button>
             </div>
@@ -74,124 +77,141 @@
     </header>
 
     <!-- 搜索栏 (默认隐藏) -->
-    <div id="searchContainer" class="hidden bg-white border-t border-gray-100 py-4 shadow-sm">
+    <div id="searchContainer" class="hidden bg-white border-t border-gray-100 py-3 shadow-sm animate-fadeIn">
         <div class="container mx-auto px-4">
             <div class="relative">
-                <input type="text" placeholder="搜索网站..." class="w-full py-3 px-5 pr-12 rounded-xl border border-gray-200 focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all">
-                <button class="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-primary">
-                    <i class="fa fa-search text-lg"></i>
+                <input type="text" placeholder="搜索网站..." class="w-full py-2.5 px-4 pr-10 rounded-lg border border-gray-200 focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all text-sm">
+                <button class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-primary transition-colors">
+                    <i class="fa fa-search"></i>
                 </button>
             </div>
         </div>
     </div>
 
-    <!-- 主横幅 -->
-    <div class="bg-gradient-to-r from-primary to-purple-600 text-white py-16 md:py-24 px-4">
-        <div class="container mx-auto text-center">
-            <h2 class="text-3xl md:text-5xl font-bold mb-4 leading-tight">快速访问我的收藏网站</h2>
-            <p class="text-lg md:text-xl opacity-90 max-w-2xl mx-auto">精心分类的常用网站导航，让上网更高效</p>
+    <!-- 主横幅 - 增加了更精致的视觉效果 -->
+    <div class="gradient-bg text-white py-14 md:py-20 px-4 relative overflow-hidden">
+        <!-- 装饰性背景元素 -->
+        <div class="absolute inset-0 overflow-hidden opacity-10">
+            <div class="absolute -right-10 -top-10 w-64 h-64 rounded-full bg-white blur-3xl"></div>
+            <div class="absolute left-1/4 bottom-0 w-80 h-80 rounded-full bg-white blur-3xl"></div>
+        </div>
+        <div class="container mx-auto text-center relative z-10">
+            <h2 class="text-3xl md:text-4xl font-bold mb-4 leading-tight tracking-tight">快速访问我的收藏网站</h2>
+            <p class="text-white/90 max-w-2xl mx-auto text-sm md:text-base">精心分类的常用网站导航，让上网更高效</p>
         </div>
     </div>
 
     <main class="container mx-auto px-4 py-10">
-        <!-- 分类统计卡片 -->
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-12">
-            <div class="bg-white rounded-xl shadow-card p-5 text-center">
-                <div class="text-primary text-3xl mb-2"><i class="fa fa-graduation-cap"></i></div>
-                <p class="text-gray-500 text-sm">学习教育</p>
+        <!-- 分类统计卡片 - 优化了设计和交互 -->
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-10">
+            <div class="bg-white rounded-xl shadow-card p-5 text-center card-hover cursor-pointer" data-target="learning">
+                <div class="text-primary text-2xl mb-2 bg-primary/10 w-12 h-12 rounded-full flex items-center justify-center mx-auto"><i class="fa fa-graduation-cap"></i></div>
+                <p class="text-gray-500 text-xs">学习教育</p>
                 <p class="font-bold text-dark mt-1">6 个网站</p>
             </div>
-            <div class="bg-white rounded-xl shadow-card p-5 text-center">
-                <div class="text-secondary text-3xl mb-2"><i class="fa fa-certificate"></i></div>
-                <p class="text-gray-500 text-sm">软件考试</p>
+            <div class="bg-white rounded-xl shadow-card p-5 text-center card-hover cursor-pointer" data-target="exams">
+                <div class="text-secondary text-2xl mb-2 bg-secondary/10 w-12 h-12 rounded-full flex items-center justify-center mx-auto"><i class="fa fa-certificate"></i></div>
+                <p class="text-gray-500 text-xs">软件考试</p>
                 <p class="font-bold text-dark mt-1">4 个网站</p>
             </div>
-            <div class="bg-white rounded-xl shadow-card p-5 text-center">
-                <div class="text-accent text-3xl mb-2"><i class="fa fa-magic"></i></div>
-                <p class="text-gray-500 text-sm">AI工具</p>
+            <div class="bg-white rounded-xl shadow-card p-5 text-center card-hover cursor-pointer" data-target="ai-tools">
+                <div class="text-accent text-2xl mb-2 bg-accent/10 w-12 h-12 rounded-full flex items-center justify-center mx-auto"><i class="fa fa-magic"></i></div>
+                <p class="text-gray-500 text-xs">AI工具</p>
                 <p class="font-bold text-dark mt-1">8 个网站</p>
             </div>
-            <div class="bg-white rounded-xl shadow-card p-5 text-center">
-                <div class="text-blue-500 text-3xl mb-2"><i class="fa fa-ellipsis-h"></i></div>
-                <p class="text-gray-500 text-sm">其他分类</p>
+            <div class="bg-white rounded-xl shadow-card p-5 text-center card-hover cursor-pointer" data-target="design-tools">
+                <div class="text-blue-500 text-2xl mb-2 bg-blue-500/10 w-12 h-12 rounded-full flex items-center justify-center mx-auto"><i class="fa fa-ellipsis-h"></i></div>
+                <p class="text-gray-500 text-xs">其他分类</p>
                 <p class="font-bold text-dark mt-1">17 个网站</p>
             </div>
         </div>
 
         <!-- 学习教育类 -->
-        <section class="mb-16 section-fade-in">
-            <h2 class="category-title before:bg-primary text-dark">
+        <section id="learning" class="mb-16 section-fade-in">
+            <h2 class="category-title before:bg-primary">
                 <i class="fa fa-graduation-cap text-primary"></i>学习教育
             </h2>
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
                 <div class="site-card">
-                    <div class="flex">
-                        <img src="https://picsum.photos/seed/chaoxing/40/40" alt="学习通网站图标" class="favicon">
+                    <div class="flex items-start">
+                        <div class="favicon bg-blue-50 text-primary">
+                            <i class="fa fa-graduation-cap"></i>
+                        </div>
                         <div>
-                            <h3 class="font-semibold text-lg mb-1 text-dark">学习通</h3>
-                            <p class="text-gray-600 text-sm mb-3 line-clamp-2">在线学习平台，提供各类课程资源</p>
-                            <a href="https://i.chaoxing.com/base?t=1741065713076" target="_blank" class="text-primary hover:text-primary/80 flex items-center gap-1 text-sm font-medium">
-                                访问网站 <i class="fa fa-external-link text-xs"></i>
+                            <h3 class="font-semibold text-base mb-1 text-dark">学习通</h3>
+                            <p class="text-gray-500 text-xs mb-2 line-clamp-2">在线学习平台，提供各类课程资源</p>
+                            <a href="https://i.chaoxing.com/base?t=1741065713076" target="_blank" class="text-primary hover:text-primary/80 flex items-center gap-1 text-xs font-medium transition-colors">
+                                访问 <i class="fa fa-external-link text-xs"></i>
                             </a>
                         </div>
                     </div>
                 </div>
                 <div class="site-card">
-                    <div class="flex">
-                        <img src="https://picsum.photos/seed/yuketang/40/40" alt="雨课堂网站图标" class="favicon">
+                    <div class="flex items-start">
+                        <div class="favicon bg-blue-50 text-primary">
+                            <i class="fa fa-book"></i>
+                        </div>
                         <div>
-                            <h3 class="font-semibold text-lg mb-1 text-dark">雨课堂</h3>
-                            <p class="text-gray-600 text-sm mb-3 line-clamp-2">智慧教学平台，支持课程学习和互动</p>
-                            <a href="https://szpu.yuketang.cn/pro/courselist" target="_blank" class="text-primary hover:text-primary/80 flex items-center gap-1 text-sm font-medium">
-                                访问网站 <i class="fa fa-external-link text-xs"></i>
+                            <h3 class="font-semibold text-base mb-1 text-dark">雨课堂</h3>
+                            <p class="text-gray-500 text-xs mb-2 line-clamp-2">智慧教学平台，支持课程学习和互动</p>
+                            <a href="https://szpu.yuketang.cn/pro/courselist" target="_blank" class="text-primary hover:text-primary/80 flex items-center gap-1 text-xs font-medium transition-colors">
+                                访问 <i class="fa fa-external-link text-xs"></i>
                             </a>
                         </div>
                     </div>
                 </div>
                 <div class="site-card">
-                    <div class="flex">
-                        <img src="https://picsum.photos/seed/szpu/40/40" alt="深圳职业技术大学网站图标" class="favicon">
+                    <div class="flex items-start">
+                        <div class="favicon bg-blue-50 text-primary">
+                            <i class="fa fa-university"></i>
+                        </div>
                         <div>
-                            <h3 class="font-semibold text-lg mb-1 text-dark">深圳职业技术大学</h3>
-                            <p class="text-gray-600 text-sm mb-3 line-clamp-2">深圳职业技术大学校园官网</p>
-                            <a href="https://www.szpu.edu.cn/" target="_blank" class="text-primary hover:text-primary/80 flex items-center gap-1 text-sm font-medium">
-                                访问网站 <i class="fa fa-external-link text-xs"></i>
+                            <h3 class="font-semibold text-base mb-1 text-dark">深圳职业技术大学</h3>
+                            <p class="text-gray-500 text-xs mb-2 line-clamp-2">深圳职业技术大学校园官网</p>
+                            <a href="https://www.szpu.edu.cn/" target="_blank" class="text-primary hover:text-primary/80 flex items-center gap-1 text-xs font-medium transition-colors">
+                                访问 <i class="fa fa-external-link text-xs"></i>
                             </a>
                         </div>
                     </div>
                 </div>
                 <div class="site-card">
-                    <div class="flex">
-                        <img src="https://picsum.photos/seed/istudy/40/40" alt="深职i学习网站图标" class="favicon">
+                    <div class="flex items-start">
+                        <div class="favicon bg-blue-50 text-primary">
+                            <i class="fa fa-graduation-cap"></i>
+                        </div>
                         <div>
-                            <h3 class="font-semibold text-lg mb-1 text-dark">深职i学习</h3>
-                            <p class="text-gray-600 text-sm mb-3 line-clamp-2">深职院一体化网络教学大平台</p>
-                            <a href="https://istudy.szpu.edu.cn/portal" target="_blank" class="text-primary hover:text-primary/80 flex items-center gap-1 text-sm font-medium">
-                                访问网站 <i class="fa fa-external-link text-xs"></i>
+                            <h3 class="font-semibold text-base mb-1 text-dark">深职i学习</h3>
+                            <p class="text-gray-500 text-xs mb-2 line-clamp-2">深职院一体化网络教学大平台</p>
+                            <a href="https://istudy.szpu.edu.cn/portal" target="_blank" class="text-primary hover:text-primary/80 flex items-center gap-1 text-xs font-medium transition-colors">
+                                访问 <i class="fa fa-external-link text-xs"></i>
                             </a>
                         </div>
                     </div>
                 </div>
                 <div class="site-card">
-                    <div class="flex">
-                        <img src="https://picsum.photos/seed/xg/40/40" alt="学生管理与服务系统网站图标" class="favicon">
+                    <div class="flex items-start">
+                        <div class="favicon bg-blue-50 text-primary">
+                            <i class="fa fa-user"></i>
+                        </div>
                         <div>
-                            <h3 class="font-semibold text-lg mb-1 text-dark">学生管理与服务系统</h3>
-                            <p class="text-gray-600 text-sm mb-3 line-clamp-2">深职院学生管理与服务平台</p>
-                            <a href="https://xg.szpu.edu.cn/xg/desktop/index.do" target="_blank" class="text-primary hover:text-primary/80 flex items-center gap-1 text-sm font-medium">
-                                访问网站 <i class="fa fa-external-link text-xs"></i>
+                            <h3 class="font-semibold text-base mb-1 text-dark">学生管理与服务系统</h3>
+                            <p class="text-gray-500 text-xs mb-2 line-clamp-2">深职院学生管理与服务平台</p>
+                            <a href="https://xg.szpu.edu.cn/xg/desktop/index.do" target="_blank" class="text-primary hover:text-primary/80 flex items-center gap-1 text-xs font-medium transition-colors">
+                                访问 <i class="fa fa-external-link text-xs"></i>
                             </a>
                         </div>
                     </div>
                 </div>
                 <div class="site-card">
-                    <div class="flex">
-                        <img src="https://picsum.photos/seed/guide/40/40" alt="深圳职业技术大学新生入学指南网站图标" class="favicon">
+                    <div class="flex items-start">
+                        <div class="favicon bg-blue-50 text-primary">
+                            <i class="fa fa-file-text-o"></i>
+                        </div>
                         <div>
-                            <h3 class="font-semibold text-lg mb-1 text-dark">新生入学指南</h3>
-                            <p class="text-gray-600 text-sm mb-3 line-clamp-2">25云计算2班新生入学指南</p>
-                            <a href="https://autoglm-agent.aminer.cn/04f862ee82d69136fafaef253df86509.html#safety" target="_blank" class="text-primary hover:text-primary/80 flex items-center gap-1 text-sm font-medium">
-                                访问网站 <i class="fa fa-external-link text-xs"></i>
+                            <h3 class="font-semibold text-base mb-1 text-dark">新生入学指南</h3>
+                            <p class="text-gray-500 text-xs mb-2 line-clamp-2">25云计算2班新生入学指南</p>
+                            <a href="https://autoglm-agent.aminer.cn/04f862ee82d69136fafaef253df86509.html#safety" target="_blank" class="text-primary hover:text-primary/80 flex items-center gap-1 text-xs font-medium transition-colors">
+                                访问 <i class="fa fa-external-link text-xs"></i>
                             </a>
                         </div>
                     </div>
@@ -200,55 +220,63 @@
         </section>
 
         <!-- 软件考试类 -->
-        <section class="mb-16 section-fade-in">
-            <h2 class="category-title before:bg-secondary text-dark">
+        <section id="exams" class="mb-16 section-fade-in">
+            <h2 class="category-title before:bg-secondary">
                 <i class="fa fa-certificate text-secondary"></i>软件考试
             </h2>
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
                 <div class="site-card">
-                    <div class="flex">
-                        <img src="https://picsum.photos/seed/exam2021/40/40" alt="软考2021前真题网站图标" class="favicon">
+                    <div class="flex items-start">
+                        <div class="favicon bg-green-50 text-secondary">
+                            <i class="fa fa-file-text"></i>
+                        </div>
                         <div>
-                            <h3 class="font-semibold text-lg mb-1 text-dark">软考2021前真题</h3>
-                            <p class="text-gray-600 text-sm mb-3 line-clamp-2">软件设计师考试历年真题</p>
-                            <a href="https://ebook.qicoder.com/%E8%BD%AF%E4%BB%B6%E8%AE%BE%E8%AE%A1%E5%B8%88/notes/2021%E5%B9%B4%E4%B8%8A%E5%8D%8A%E5%B9%B4%E8%BD%AF%E8%AE%BE%E8%80%83%E8%AF%95%E4%B8%8A%E5%8D%88%E7%9C%9F%E9%A2%98.html" target="_blank" class="text-primary hover:text-primary/80 flex items-center gap-1 text-sm font-medium">
-                                访问网站 <i class="fa fa-external-link text-xs"></i>
+                            <h3 class="font-semibold text-base mb-1 text-dark">软考2021前真题</h3>
+                            <p class="text-gray-500 text-xs mb-2 line-clamp-2">软件设计师考试历年真题</p>
+                            <a href="https://ebook.qicoder.com/%E8%BD%AF%E4%BB%B6%E8%AE%BE%E8%AE%A1%E5%B8%88/notes/2021%E5%B9%B4%E4%B8%8A%E5%8D%8A%E5%B9%B4%E8%BD%AF%E8%AE%BE%E8%80%83%E8%AF%95%E4%B8%8A%E5%8D%88%E7%9C%9F%E9%A2%98.html" target="_blank" class="text-primary hover:text-primary/80 flex items-center gap-1 text-xs font-medium transition-colors">
+                                访问 <i class="fa fa-external-link text-xs"></i>
                             </a>
                         </div>
                     </div>
                 </div>
                 <div class="site-card">
-                    <div class="flex">
-                        <img src="https://picsum.photos/seed/examanswer/40/40" alt="软考真题答案解析网站图标" class="favicon">
+                    <div class="flex items-start">
+                        <div class="favicon bg-green-50 text-secondary">
+                            <i class="fa fa-check-square-o"></i>
+                        </div>
                         <div>
-                            <h3 class="font-semibold text-lg mb-1 text-dark">软考真题答案解析</h3>
-                            <p class="text-gray-600 text-sm mb-3 line-clamp-2">包含多年软考真题、答案和解析</p>
-                            <a href="https://www.rkpass.cn/tk_index.jsp" target="_blank" class="text-primary hover:text-primary/80 flex items-center gap-1 text-sm font-medium">
-                                访问网站 <i class="fa fa-external-link text-xs"></i>
+                            <h3 class="font-semibold text-base mb-1 text-dark">软考真题答案解析</h3>
+                            <p class="text-gray-500 text-xs mb-2 line-clamp-2">包含多年软考真题、答案和解析</p>
+                            <a href="https://www.rkpass.cn/tk_index.jsp" target="_blank" class="text-primary hover:text-primary/80 flex items-center gap-1 text-xs font-medium transition-colors">
+                                访问 <i class="fa fa-external-link text-xs"></i>
                             </a>
                         </div>
                     </div>
                 </div>
                 <div class="site-card">
-                    <div class="flex">
-                        <img src="https://picsum.photos/seed/ruankao/40/40" alt="中国计算机技术职业资格网网站图标" class="favicon">
+                    <div class="flex items-start">
+                        <div class="favicon bg-green-50 text-secondary">
+                            <i class="fa fa-building"></i>
+                        </div>
                         <div>
-                            <h3 class="font-semibold text-lg mb-1 text-dark">计算机技术职业资格网</h3>
-                            <p class="text-gray-600 text-sm mb-3 line-clamp-2">官方计算机技术与软件专业技术资格考试网站</p>
-                            <a href="https://www.ruankao.org.cn/" target="_blank" class="text-primary hover:text-primary/80 flex items-center gap-1 text-sm font-medium">
-                                访问网站 <i class="fa fa-external-link text-xs"></i>
+                            <h3 class="font-semibold text-base mb-1 text-dark">计算机技术职业资格网</h3>
+                            <p class="text-gray-500 text-xs mb-2 line-clamp-2">官方计算机技术与软件专业技术资格考试网站</p>
+                            <a href="https://www.ruankao.org.cn/" target="_blank" class="text-primary hover:text-primary/80 flex items-center gap-1 text-xs font-medium transition-colors">
+                                访问 <i class="fa fa-external-link text-xs"></i>
                             </a>
                         </div>
                     </div>
                 </div>
                 <div class="site-card">
-                    <div class="flex">
-                        <img src="https://picsum.photos/seed/exambank/40/40" alt="中级软件设计师题库网站图标" class="favicon">
+                    <div class="flex items-start">
+                        <div class="favicon bg-green-50 text-secondary">
+                            <i class="fa fa-list-alt"></i>
+                        </div>
                         <div>
-                            <h3 class="font-semibold text-lg mb-1 text-dark">中级软件设计师题库</h3>
-                            <p class="text-gray-600 text-sm mb-3 line-clamp-2">2025年计算机软件与技术《中级软件设计师》题库</p>
-                            <a href="https://www.huikao8.com/questionDetails?id=92607898112a43cc84db78cb99b380f4" target="_blank" class="text-primary hover:text-primary/80 flex items-center gap-1 text-sm font-medium">
-                                访问网站 <i class="fa fa-external-link text-xs"></i>
+                            <h3 class="font-semibold text-base mb-1 text-dark">中级软件设计师题库</h3>
+                            <p class="text-gray-500 text-xs mb-2 line-clamp-2">2025年计算机软件与技术《中级软件设计师》题库</p>
+                            <a href="https://www.huikao8.com/questionDetails?id=92607898112a43cc84db78cb99b380f4" target="_blank" class="text-primary hover:text-primary/80 flex items-center gap-1 text-xs font-medium transition-colors">
+                                访问 <i class="fa fa-external-link text-xs"></i>
                             </a>
                         </div>
                     </div>
@@ -257,103 +285,119 @@
         </section>
 
         <!-- AI工具类 -->
-        <section class="mb-16 section-fade-in">
-            <h2 class="category-title before:bg-accent text-dark">
+        <section id="ai-tools" class="mb-16 section-fade-in">
+            <h2 class="category-title before:bg-accent">
                 <i class="fa fa-magic text-accent"></i>AI工具
             </h2>
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
                 <div class="site-card">
-                    <div class="flex">
-                        <img src="https://picsum.photos/seed/deepseek/40/40" alt="DeepSeek网站图标" class="favicon">
+                    <div class="flex items-start">
+                        <div class="favicon bg-purple-50 text-accent">
+                            <i class="fa fa-lightbulb-o"></i>
+                        </div>
                         <div>
-                            <h3 class="font-semibold text-lg mb-1 text-dark">DeepSeek</h3>
-                            <p class="text-gray-600 text-sm mb-3 line-clamp-2">探索未至之境的AI助手</p>
-                            <a href="https://chat.deepseek.com/" target="_blank" class="text-primary hover:text-primary/80 flex items-center gap-1 text-sm font-medium">
-                                访问网站 <i class="fa fa-external-link text-xs"></i>
+                            <h3 class="font-semibold text-base mb-1 text-dark">DeepSeek</h3>
+                            <p class="text-gray-500 text-xs mb-2 line-clamp-2">探索未至之境的AI助手</p>
+                            <a href="https://chat.deepseek.com/" target="_blank" class="text-primary hover:text-primary/80 flex items-center gap-1 text-xs font-medium transition-colors">
+                                访问 <i class="fa fa-external-link text-xs"></i>
                             </a>
                         </div>
                     </div>
                 </div>
                 <div class="site-card">
-                    <div class="flex">
-                        <img src="https://picsum.photos/seed/kimi/40/40" alt="Kimi.ai网站图标" class="favicon">
+                    <div class="flex items-start">
+                        <div class="favicon bg-purple-50 text-accent">
+                            <i class="fa fa-comment"></i>
+                        </div>
                         <div>
-                            <h3 class="font-semibold text-lg mb-1 text-dark">Kimi.ai</h3>
-                            <p class="text-gray-600 text-sm mb-3 line-clamp-2">会推理解析，能深度思考的AI助手</p>
-                            <a href="https://kimi.moonshot.cn/" target="_blank" class="text-primary hover:text-primary/80 flex items-center gap-1 text-sm font-medium">
-                                访问网站 <i class="fa fa-external-link text-xs"></i>
+                            <h3 class="font-semibold text-base mb-1 text-dark">Kimi.ai</h3>
+                            <p class="text-gray-500 text-xs mb-2 line-clamp-2">会推理解析，能深度思考的AI助手</p>
+                            <a href="https://kimi.moonshot.cn/" target="_blank" class="text-primary hover:text-primary/80 flex items-center gap-1 text-xs font-medium transition-colors">
+                                访问 <i class="fa fa-external-link text-xs"></i>
                             </a>
                         </div>
                     </div>
                 </div>
                 <div class="site-card">
-                    <div class="flex">
-                        <img src="https://picsum.photos/seed/napkin/40/40" alt="Napkin AI 生成图表网站图标" class="favicon">
+                    <div class="flex items-start">
+                        <div class="favicon bg-purple-50 text-accent">
+                            <i class="fa fa-bar-chart"></i>
+                        </div>
                         <div>
-                            <h3 class="font-semibold text-lg mb-1 text-dark">Napkin AI 生成图表</h3>
-                            <p class="text-gray-600 text-sm mb-3 line-clamp-2">AI驱动的图表生成工具</p>
-                            <a href="https://app.napkin.ai/page/CgoiCHByb2Qtb25lEiwKBFBhZ2UaJGU3ODY3NDE0LTZmMDgtNDgzNS1iZWUwLTQ4ZjNlODVkZTNkNg" target="_blank" class="text-primary hover:text-primary/80 flex items-center gap-1 text-sm font-medium">
-                                访问网站 <i class="fa fa-external-link text-xs"></i>
+                            <h3 class="font-semibold text-base mb-1 text-dark">Napkin AI 生成图表</h3>
+                            <p class="text-gray-500 text-xs mb-2 line-clamp-2">AI驱动的图表生成工具</p>
+                            <a href="https://app.napkin.ai/page/CgoiCHByb2Qtb25lEiwKBFBhZ2UaJGU3ODY3NDE0LTZmMDgtNDgzNS1iZWUwLTQ4ZjNlODVkZTNkNg" target="_blank" class="text-primary hover:text-primary/80 flex items-center gap-1 text-xs font-medium transition-colors">
+                                访问 <i class="fa fa-external-link text-xs"></i>
                             </a>
                         </div>
                     </div>
                 </div>
                 <div class="site-card">
-                    <div class="flex">
-                        <img src="https://picsum.photos/seed/tripo/40/40" alt="Tripo 3D网站图标" class="favicon">
+                    <div class="flex items-start">
+                        <div class="favicon bg-purple-50 text-accent">
+                            <i class="fa fa-cube"></i>
+                        </div>
                         <div>
-                            <h3 class="font-semibold text-lg mb-1 text-dark">Tripo 3D</h3>
-                            <p class="text-gray-600 text-sm mb-3 line-clamp-2">随心设计、个性定制，打造属于您的3D世界</p>
-                            <a href="https://www.tripo3d.ai/app/home" target="_blank" class="text-primary hover:text-primary/80 flex items-center gap-1 text-sm font-medium">
-                                访问网站 <i class="fa fa-external-link text-xs"></i>
+                            <h3 class="font-semibold text-base mb-1 text-dark">Tripo 3D</h3>
+                            <p class="text-gray-500 text-xs mb-2 line-clamp-2">随心设计、个性定制，打造属于您的3D世界</p>
+                            <a href="https://www.tripo3d.ai/app/home" target="_blank" class="text-primary hover:text-primary/80 flex items-center gap-1 text-xs font-medium transition-colors">
+                                访问 <i class="fa fa-external-link text-xs"></i>
                             </a>
                         </div>
                     </div>
                 </div>
                 <div class="site-card">
-                    <div class="flex">
-                        <img src="https://picsum.photos/seed/vheer/40/40" alt="Vheer网站图标" class="favicon">
+                    <div class="flex items-start">
+                        <div class="favicon bg-purple-50 text-accent">
+                            <i class="fa fa-picture-o"></i>
+                        </div>
                         <div>
-                            <h3 class="font-semibold text-lg mb-1 text-dark">Vheer</h3>
-                            <p class="text-gray-600 text-sm mb-3 line-clamp-2">在线图像生成工具，无限制，无需注册</p>
-                            <a href="https://www.vheer.com/" target="_blank" class="text-primary hover:text-primary/80 flex items-center gap-1 text-sm font-medium">
-                                访问网站 <i class="fa fa-external-link text-xs"></i>
+                            <h3 class="font-semibold text-base mb-1 text-dark">Vheer</h3>
+                            <p class="text-gray-500 text-xs mb-2 line-clamp-2">在线图像生成工具，无限制，无需注册</p>
+                            <a href="https://www.vheer.com/" target="_blank" class="text-primary hover:text-primary/80 flex items-center gap-1 text-xs font-medium transition-colors">
+                                访问 <i class="fa fa-external-link text-xs"></i>
                             </a>
                         </div>
                     </div>
                 </div>
                 <div class="site-card">
-                    <div class="flex">
-                        <img src="https://picsum.photos/seed/xingliu/40/40" alt="星流网站图标" class="favicon">
+                    <div class="flex items-start">
+                        <div class="favicon bg-purple-50 text-accent">
+                            <i class="fa fa-star"></i>
+                        </div>
                         <div>
-                            <h3 class="font-semibold text-lg mb-1 text-dark">星流</h3>
-                            <p class="text-gray-600 text-sm mb-3 line-clamp-2">新一代AI创作工具</p>
-                            <a href="https://www.xingliu.art/" target="_blank" class="text-primary hover:text-primary/80 flex items-center gap-1 text-sm font-medium">
-                                访问网站 <i class="fa fa-external-link text-xs"></i>
+                            <h3 class="font-semibold text-base mb-1 text-dark">星流</h3>
+                            <p class="text-gray-500 text-xs mb-2 line-clamp-2">新一代AI创作工具</p>
+                            <a href="https://www.xingliu.art/" target="_blank" class="text-primary hover:text-primary/80 flex items-center gap-1 text-xs font-medium transition-colors">
+                                访问 <i class="fa fa-external-link text-xs"></i>
                             </a>
                         </div>
                     </div>
                 </div>
                 <div class="site-card">
-                    <div class="flex">
-                        <img src="https://picsum.photos/seed/autoglm/40/40" alt="AutoGLM网站图标" class="favicon">
+                    <div class="flex items-start">
+                        <div class="favicon bg-purple-50 text-accent">
+                            <i class="fa fa-cogs"></i>
+                        </div>
                         <div>
-                            <h3 class="font-semibold text-lg mb-1 text-dark">AutoGLM</h3>
-                            <p class="text-gray-600 text-sm mb-3 line-clamp-2">基于GLM的自动化AI工具</p>
-                            <a href="https://autoglm.zhipuai.cn/?channel=autoglm_web_landing_page" target="_blank" class="text-primary hover:text-primary/80 flex items-center gap-1 text-sm font-medium">
-                                访问网站 <i class="fa fa-external-link text-xs"></i>
+                            <h3 class="font-semibold text-base mb-1 text-dark">AutoGLM</h3>
+                            <p class="text-gray-500 text-xs mb-2 line-clamp-2">基于GLM的自动化AI工具</p>
+                            <a href="https://autoglm.zhipuai.cn/?channel=autoglm_web_landing_page" target="_blank" class="text-primary hover:text-primary/80 flex items-center gap-1 text-xs font-medium transition-colors">
+                                访问 <i class="fa fa-external-link text-xs"></i>
                             </a>
                         </div>
                     </div>
                 </div>
                 <div class="site-card">
-                    <div class="flex">
-                        <img src="https://picsum.photos/seed/bookmark/40/40" alt="我的导航 - 书签收藏管理网站图标" class="favicon">
+                    <div class="flex items-start">
+                        <div class="favicon bg-purple-50 text-accent">
+                            <i class="fa fa-bookmark"></i>
+                        </div>
                         <div>
-                            <h3 class="font-semibold text-lg mb-1 text-dark">导航书签收藏管理</h3>
-                            <p class="text-gray-600 text-sm mb-3 line-clamp-2">基于AutoGLM的书签收藏管理工具</p>
-                            <a href="https://autoglm-agent.aminer.cn/6f3fcb75165c3a0c8f121ed330e0fe7c.html" target="_blank" class="text-primary hover:text-primary/80 flex items-center gap-1 text-sm font-medium">
-                                访问网站 <i class="fa fa-external-link text-xs"></i>
+                            <h3 class="font-semibold text-base mb-1 text-dark">导航书签收藏管理</h3>
+                            <p class="text-gray-500 text-xs mb-2 line-clamp-2">基于AutoGLM的书签收藏管理工具</p>
+                            <a href="https://autoglm-agent.aminer.cn/6f3fcb75165c3a0c8f121ed330e0fe7c.html" target="_blank" class="text-primary hover:text-primary/80 flex items-center gap-1 text-xs font-medium transition-colors">
+                                访问 <i class="fa fa-external-link text-xs"></i>
                             </a>
                         </div>
                     </div>
@@ -362,43 +406,49 @@
         </section>
 
         <!-- 设计工具类 -->
-        <section class="mb-16 section-fade-in">
-            <h2 class="category-title before:bg-purple-500 text-dark">
+        <section id="design-tools" class="mb-16 section-fade-in">
+            <h2 class="category-title before:bg-purple-500">
                 <i class="fa fa-paint-brush text-purple-500"></i>设计工具
             </h2>
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
                 <div class="site-card">
-                    <div class="flex">
-                        <img src="https://picsum.photos/seed/removebg/40/40" alt="一键抠图网站图标" class="favicon">
+                    <div class="flex items-start">
+                        <div class="favicon bg-purple-50 text-purple-500">
+                            <i class="fa fa-cut"></i>
+                        </div>
                         <div>
-                            <h3 class="font-semibold text-lg mb-1 text-dark">一键抠图</h3>
-                            <p class="text-gray-600 text-sm mb-3 line-clamp-2">在线图片背景去除工具</p>
-                            <a href="https://remove.photos/zh-cn/remove-background?fileID=demo-1" target="_blank" class="text-primary hover:text-primary/80 flex items-center gap-1 text-sm font-medium">
-                                访问网站 <i class="fa fa-external-link text-xs"></i>
+                            <h3 class="font-semibold text-base mb-1 text-dark">一键抠图</h3>
+                            <p class="text-gray-500 text-xs mb-2 line-clamp-2">在线图片背景去除工具</p>
+                            <a href="https://remove.photos/zh-cn/remove-background?fileID=demo-1" target="_blank" class="text-primary hover:text-primary/80 flex items-center gap-1 text-xs font-medium transition-colors">
+                                访问 <i class="fa fa-external-link text-xs"></i>
                             </a>
                         </div>
                     </div>
                 </div>
                 <div class="site-card">
-                    <div class="flex">
-                        <img src="https://picsum.photos/seed/compress/40/40" alt="在线图片压缩网站图标" class="favicon">
+                    <div class="flex items-start">
+                        <div class="favicon bg-purple-50 text-purple-500">
+                            <i class="fa fa-compress"></i>
+                        </div>
                         <div>
-                            <h3 class="font-semibold text-lg mb-1 text-dark">在线图片压缩</h3>
-                            <p class="text-gray-600 text-sm mb-3 line-clamp-2">docsmall在线图片压缩工具</p>
-                            <a href="https://docsmall.com/image-compress" target="_blank" class="text-primary hover:text-primary/80 flex items-center gap-1 text-sm font-medium">
-                                访问网站 <i class="fa fa-external-link text-xs"></i>
+                            <h3 class="font-semibold text-base mb-1 text-dark">在线图片压缩</h3>
+                            <p class="text-gray-500 text-xs mb-2 line-clamp-2">docsmall在线图片压缩工具</p>
+                            <a href="https://docsmall.com/image-compress" target="_blank" class="text-primary hover:text-primary/80 flex items-center gap-1 text-xs font-medium transition-colors">
+                                访问 <i class="fa fa-external-link text-xs"></i>
                             </a>
                         </div>
                     </div>
                 </div>
                 <div class="site-card">
-                    <div class="flex">
-                        <img src="https://picsum.photos/seed/gemdesign/40/40" alt="GemDesign 公司网站图标" class="favicon">
+                    <div class="flex items-start">
+                        <div class="favicon bg-purple-50 text-purple-500">
+                            <i class="fa fa-pencil"></i>
+                        </div>
                         <div>
-                            <h3 class="font-semibold text-lg mb-1 text-dark">GemDesign 公司</h3>
-                            <p class="text-gray-600 text-sm mb-3 line-clamp-2">在线设计工具平台</p>
-                            <a href="https://design.gemcoder.com/#/edit?appuuid=1938605539856482304&version=0&projectname=%E4%BA%8C%E6%89%8B%E4%BA%A4%E6%98%93%E5%B9%B3%E5%8F%B0%E7%BD%91%E9%A1%B5" target="_blank" class="text-primary hover:text-primary/80 flex items-center gap-1 text-sm font-medium">
-                                访问网站 <i class="fa fa-external-link text-xs"></i>
+                            <h3 class="font-semibold text-base mb-1 text-dark">GemDesign 公司</h3>
+                            <p class="text-gray-500 text-xs mb-2 line-clamp-2">在线设计工具平台</p>
+                            <a href="https://design.gemcoder.com/#/edit?appuuid=1938605539856482304&amp;version=0&amp;projectname=%E4%BA%8C%E6%89%8B%E4%BA%A4%E6%98%93%E5%B9%B3%E5%8F%B0%E7%BD%91%E9%A1%B5" target="_blank" class="text-primary hover:text-primary/80 flex items-center gap-1 text-xs font-medium transition-colors">
+                                访问 <i class="fa fa-external-link text-xs"></i>
                             </a>
                         </div>
                     </div>
@@ -407,43 +457,49 @@
         </section>
 
         <!-- 壁纸图片类 -->
-        <section class="mb-16 section-fade-in">
-            <h2 class="category-title before:bg-green-500 text-dark">
+        <section id="wallpapers" class="mb-16 section-fade-in">
+            <h2 class="category-title before:bg-green-500">
                 <i class="fa fa-image text-green-500"></i>壁纸图片
             </h2>
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
                 <div class="site-card">
-                    <div class="flex">
-                        <img src="https://picsum.photos/seed/wallhere/40/40" alt="WallHere 壁纸库网站图标" class="favicon">
+                    <div class="flex items-start">
+                        <div class="favicon bg-green-50 text-green-500">
+                            <i class="fa fa-desktop"></i>
+                        </div>
                         <div>
-                            <h3 class="font-semibold text-lg mb-1 text-dark">WallHere 壁纸库</h3>
-                            <p class="text-gray-600 text-sm mb-3 line-clamp-2">世界著名的壁纸网站，提供电脑桌面壁纸</p>
-                            <a href="https://wallhere.com/" target="_blank" class="text-primary hover:text-primary/80 flex items-center gap-1 text-sm font-medium">
-                                访问网站 <i class="fa fa-external-link text-xs"></i>
+                            <h3 class="font-semibold text-base mb-1 text-dark">WallHere 壁纸库</h3>
+                            <p class="text-gray-500 text-xs mb-2 line-clamp-2">世界著名的壁纸网站，提供电脑桌面壁纸</p>
+                            <a href="https://wallhere.com/" target="_blank" class="text-primary hover:text-primary/80 flex items-center gap-1 text-xs font-medium transition-colors">
+                                访问 <i class="fa fa-external-link text-xs"></i>
                             </a>
                         </div>
                     </div>
                 </div>
                 <div class="site-card">
-                    <div class="flex">
-                        <img src="https://picsum.photos/seed/haowallpaper/40/40" alt="哲风壁纸网站图标" class="favicon">
+                    <div class="flex items-start">
+                        <div class="favicon bg-green-50 text-green-500">
+                            <i class="fa fa-picture-o"></i>
+                        </div>
                         <div>
-                            <h3 class="font-semibold text-lg mb-1 text-dark">哲风壁纸</h3>
-                            <p class="text-gray-600 text-sm mb-3 line-clamp-2">免费4K高清壁纸、电脑背景图片、Mac壁纸网站</p>
-                            <a href="https://haowallpaper.com/homeView" target="_blank" class="text-primary hover:text-primary/80 flex items-center gap-1 text-sm font-medium">
-                                访问网站 <i class="fa fa-external-link text-xs"></i>
+                            <h3 class="font-semibold text-base mb-1 text-dark">哲风壁纸</h3>
+                            <p class="text-gray-500 text-xs mb-2 line-clamp-2">免费4K高清壁纸、电脑背景图片、Mac壁纸网站</p>
+                            <a href="https://haowallpaper.com/homeView" target="_blank" class="text-primary hover:text-primary/80 flex items-center gap-1 text-xs font-medium transition-colors">
+                                访问 <i class="fa fa-external-link text-xs"></i>
                             </a>
                         </div>
                     </div>
                 </div>
                 <div class="site-card">
-                    <div class="flex">
-                        <img src="https://picsum.photos/seed/wallpaper/40/40" alt="在线电脑壁纸网站图标" class="favicon">
+                    <div class="flex items-start">
+                        <div class="favicon bg-green-50 text-green-500">
+                            <i class="fa fa-picture-o"></i>
+                        </div>
                         <div>
-                            <h3 class="font-semibold text-lg mb-1 text-dark">在线电脑壁纸</h3>
-                            <p class="text-gray-600 text-sm mb-3 line-clamp-2">提供各类电脑壁纸下载</p>
-                            <a href="https://tools.liumingye.cn/wallpaper/" target="_blank" class="text-primary hover:text-primary/80 flex items-center gap-1 text-sm font-medium">
-                                访问网站 <i class="fa fa-external-link text-xs"></i>
+                            <h3 class="font-semibold text-base mb-1 text-dark">在线电脑壁纸</h3>
+                            <p class="text-gray-500 text-xs mb-2 line-clamp-2">提供各类电脑壁纸下载</p>
+                            <a href="https://tools.liumingye.cn/wallpaper/" target="_blank" class="text-primary hover:text-primary/80 flex items-center gap-1 text-xs font-medium transition-colors">
+                                访问 <i class="fa fa-external-link text-xs"></i>
                             </a>
                         </div>
                     </div>
@@ -452,79 +508,91 @@
         </section>
 
         <!-- 娱乐休闲类 -->
-        <section class="mb-16 section-fade-in">
-            <h2 class="category-title before:bg-red-500 text-dark">
+        <section id="entertainment" class="mb-16 section-fade-in">
+            <h2 class="category-title before:bg-red-500">
                 <i class="fa fa-gamepad text-red-500"></i>娱乐休闲
             </h2>
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
                 <div class="site-card">
-                    <div class="flex">
-                        <img src="https://picsum.photos/seed/bilibili/40/40" alt="哔哩哔哩网站图标" class="favicon">
+                    <div class="flex items-start">
+                        <div class="favicon bg-red-50 text-red-500">
+                            <i class="fa fa-play-circle-o"></i>
+                        </div>
                         <div>
-                            <h3 class="font-semibold text-lg mb-1 text-dark">哔哩哔哩</h3>
-                            <p class="text-gray-600 text-sm mb-3 line-clamp-2">视频分享平台，包含动画、番剧、游戏等内容</p>
-                            <a href="https://www.bilibili.com/" target="_blank" class="text-primary hover:text-primary/80 flex items-center gap-1 text-sm font-medium">
-                                访问网站 <i class="fa fa-external-link text-xs"></i>
+                            <h3 class="font-semibold text-base mb-1 text-dark">哔哩哔哩</h3>
+                            <p class="text-gray-500 text-xs mb-2 line-clamp-2">视频分享平台，包含动画、番剧、游戏等内容</p>
+                            <a href="https://www.bilibili.com/" target="_blank" class="text-primary hover:text-primary/80 flex items-center gap-1 text-xs font-medium transition-colors">
+                                访问 <i class="fa fa-external-link text-xs"></i>
                             </a>
                         </div>
                     </div>
                 </div>
                 <div class="site-card">
-                    <div class="flex">
-                        <img src="https://picsum.photos/seed/douyin/40/40" alt="抖音网站图标" class="favicon">
+                    <div class="flex items-start">
+                        <div class="favicon bg-red-50 text-red-500">
+                            <i class="fa fa-video-camera"></i>
+                        </div>
                         <div>
-                            <h3 class="font-semibold text-lg mb-1 text-dark">抖音</h3>
-                            <p class="text-gray-600 text-sm mb-3 line-clamp-2">短视频分享平台，记录美好生活</p>
-                            <a href="https://www.douyin.com/" target="_blank" class="text-primary hover:text-primary/80 flex items-center gap-1 text-sm font-medium">
-                                访问网站 <i class="fa fa-external-link text-xs"></i>
+                            <h3 class="font-semibold text-base mb-1 text-dark">抖音</h3>
+                            <p class="text-gray-500 text-xs mb-2 line-clamp-2">短视频分享平台，记录美好生活</p>
+                            <a href="https://www.douyin.com/" target="_blank" class="text-primary hover:text-primary/80 flex items-center gap-1 text-xs font-medium transition-colors">
+                                访问 <i class="fa fa-external-link text-xs"></i>
                             </a>
                         </div>
                     </div>
                 </div>
                 <div class="site-card">
-                    <div class="flex">
-                        <img src="https://picsum.photos/seed/poki/40/40" alt="Poki (宝玩)网站图标" class="favicon">
+                    <div class="flex items-start">
+                        <div class="favicon bg-red-50 text-red-500">
+                            <i class="fa fa-gamepad"></i>
+                        </div>
                         <div>
-                            <h3 class="font-semibold text-lg mb-1 text-dark">Poki (宝玩)</h3>
-                            <p class="text-gray-600 text-sm mb-3 line-clamp-2">免费在线小游戏平台</p>
-                            <a href="https://poki.com/zh" target="_blank" class="text-primary hover:text-primary/80 flex items-center gap-1 text-sm font-medium">
-                                访问网站 <i class="fa fa-external-link text-xs"></i>
+                            <h3 class="font-semibold text-base mb-1 text-dark">Poki (宝玩)</h3>
+                            <p class="text-gray-500 text-xs mb-2 line-clamp-2">免费在线小游戏平台</p>
+                            <a href="https://poki.com/zh" target="_blank" class="text-primary hover:text-primary/80 flex items-center gap-1 text-xs font-medium transition-colors">
+                                访问 <i class="fa fa-external-link text-xs"></i>
                             </a>
                         </div>
                     </div>
                 </div>
                 <div class="site-card">
-                    <div class="flex">
-                        <img src="https://picsum.photos/seed/alger/40/40" alt="AlgerMusic网站图标" class="favicon">
+                    <div class="flex items-start">
+                        <div class="favicon bg-red-50 text-red-500">
+                            <i class="fa fa-music"></i>
+                        </div>
                         <div>
-                            <h3 class="font-semibold text-lg mb-1 text-dark">AlgerMusic</h3>
-                            <p class="text-gray-600 text-sm mb-3 line-clamp-2">在线音乐播放平台</p>
-                            <a href="http://mc.alger.fun/#/" target="_blank" class="text-primary hover:text-primary/80 flex items-center gap-1 text-sm font-medium">
-                                访问网站 <i class="fa fa-external-link text-xs"></i>
+                            <h3 class="font-semibold text-base mb-1 text-dark">AlgerMusic</h3>
+                            <p class="text-gray-500 text-xs mb-2 line-clamp-2">在线音乐播放平台</p>
+                            <a href="http://mc.alger.fun/#/" target="_blank" class="text-primary hover:text-primary/80 flex items-center gap-1 text-xs font-medium transition-colors">
+                                访问 <i class="fa fa-external-link text-xs"></i>
                             </a>
                         </div>
                     </div>
                 </div>
                 <div class="site-card">
-                    <div class="flex">
-                        <img src="https://picsum.photos/seed/mwcy/40/40" alt="喵物次元网站图标" class="favicon">
+                    <div class="flex items-start">
+                        <div class="favicon bg-red-50 text-red-500">
+                            <i class="fa fa-television"></i>
+                        </div>
                         <div>
-                            <h3 class="font-semibold text-lg mb-1 text-dark">喵物次元</h3>
-                            <p class="text-gray-600 text-sm mb-3 line-clamp-2">致力高质量追番动漫网站</p>
-                            <a href="https://www.mwcy.net/" target="_blank" class="text-primary hover:text-primary/80 flex items-center gap-1 text-sm font-medium">
-                                访问网站 <i class="fa fa-external-link text-xs"></i>
+                            <h3 class="font-semibold text-base mb-1 text-dark">喵物次元</h3>
+                            <p class="text-gray-500 text-xs mb-2 line-clamp-2">致力高质量追番动漫网站</p>
+                            <a href="https://www.mwcy.net/" target="_blank" class="text-primary hover:text-primary/80 flex items-center gap-1 text-xs font-medium transition-colors">
+                                访问 <i class="fa fa-external-link text-xs"></i>
                             </a>
                         </div>
                     </div>
                 </div>
                 <div class="site-card">
-                    <div class="flex">
-                        <img src="https://picsum.photos/seed/czzy/40/40" alt="厂长资源网站图标" class="favicon">
+                    <div class="flex items-start">
+                        <div class="favicon bg-red-50 text-red-500">
+                            <i class="fa fa-film"></i>
+                        </div>
                         <div>
-                            <h3 class="font-semibold text-lg mb-1 text-dark">厂长资源</h3>
-                            <p class="text-gray-600 text-sm mb-3 line-clamp-2">厂长影视官网，超清视频站</p>
-                            <a href="https://www.czzymovie.com/" target="_blank" class="text-primary hover:text-primary/80 flex items-center gap-1 text-sm font-medium">
-                                访问网站 <i class="fa fa-external-link text-xs"></i>
+                            <h3 class="font-semibold text-base mb-1 text-dark">厂长资源</h3>
+                            <p class="text-gray-500 text-xs mb-2 line-clamp-2">厂长影视官网，超清视频站</p>
+                            <a href="https://www.czzymovie.com/" target="_blank" class="text-primary hover:text-primary/80 flex items-center gap-1 text-xs font-medium transition-colors">
+                                访问 <i class="fa fa-external-link text-xs"></i>
                             </a>
                         </div>
                     </div>
@@ -533,79 +601,91 @@
         </section>
 
         <!-- 工具资源类 -->
-        <section class="mb-16 section-fade-in">
-            <h2 class="category-title before:bg-blue-700 text-dark">
+        <section id="tools" class="mb-16 section-fade-in">
+            <h2 class="category-title before:bg-blue-700">
                 <i class="fa fa-wrench text-blue-700"></i>工具资源
             </h2>
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
                 <div class="site-card">
-                    <div class="flex">
-                        <img src="https://picsum.photos/seed/tinywow/40/40" alt="文件格式转换网站图标" class="favicon">
+                    <div class="flex items-start">
+                        <div class="favicon bg-blue-50 text-blue-700">
+                            <i class="fa fa-exchange"></i>
+                        </div>
                         <div>
-                            <h3 class="font-semibold text-lg mb-1 text-dark">文件格式转换</h3>
-                            <p class="text-gray-600 text-sm mb-3 line-clamp-2">TinyWow提供的文件格式转换工具</p>
-                            <a href="https://tinywow.com/" target="_blank" class="text-primary hover:text-primary/80 flex items-center gap-1 text-sm font-medium">
-                                访问网站 <i class="fa fa-external-link text-xs"></i>
+                            <h3 class="font-semibold text-base mb-1 text-dark">文件格式转换</h3>
+                            <p class="text-gray-500 text-xs mb-2 line-clamp-2">TinyWow提供的文件格式转换工具</p>
+                            <a href="https://tinywow.com/" target="_blank" class="text-primary hover:text-primary/80 flex items-center gap-1 text-xs font-medium transition-colors">
+                                访问 <i class="fa fa-external-link text-xs"></i>
                             </a>
                         </div>
                     </div>
                 </div>
                 <div class="site-card">
-                    <div class="flex">
-                        <img src="https://picsum.photos/seed/ruancang/40/40" alt="软仓网站图标" class="favicon">
+                    <div class="flex items-start">
+                        <div class="favicon bg-blue-50 text-blue-700">
+                            <i class="fa fa-download"></i>
+                        </div>
                         <div>
-                            <h3 class="font-semibold text-lg mb-1 text-dark">软仓</h3>
-                            <p class="text-gray-600 text-sm mb-3 line-clamp-2">提供各类软件资源和工具</p>
-                            <a href="https://ruancang.net/" target="_blank" class="text-primary hover:text-primary/80 flex items-center gap-1 text-sm font-medium">
-                                访问网站 <i class="fa fa-external-link text-xs"></i>
+                            <h3 class="font-semibold text-base mb-1 text-dark">软仓</h3>
+                            <p class="text-gray-500 text-xs mb-2 line-clamp-2">提供各类软件资源和工具</p>
+                            <a href="https://ruancang.net/" target="_blank" class="text-primary hover:text-primary/80 flex items-center gap-1 text-xs font-medium transition-colors">
+                                访问 <i class="fa fa-external-link text-xs"></i>
                             </a>
                         </div>
                     </div>
                 </div>
                 <div class="site-card">
-                    <div class="flex">
-                        <img src="https://picsum.photos/seed/nbmap/40/40" alt="NB Map网站图标" class="favicon">
+                    <div class="flex items-start">
+                        <div class="favicon bg-blue-50 text-blue-700">
+                            <i class="fa fa-map-marker"></i>
+                        </div>
                         <div>
-                            <h3 class="font-semibold text-lg mb-1 text-dark">NB Map</h3>
-                            <p class="text-gray-600 text-sm mb-3 line-clamp-2">在线地图工具</p>
-                            <a href="https://www.nbcharts.com/map/map.php" target="_blank" class="text-primary hover:text-primary/80 flex items-center gap-1 text-sm font-medium">
-                                访问网站 <i class="fa fa-external-link text-xs"></i>
+                            <h3 class="font-semibold text-base mb-1 text-dark">NB Map</h3>
+                            <p class="text-gray-500 text-xs mb-2 line-clamp-2">在线地图工具</p>
+                            <a href="https://www.nbcharts.com/map/map.php" target="_blank" class="text-primary hover:text-primary/80 flex items-center gap-1 text-xs font-medium transition-colors">
+                                访问 <i class="fa fa-external-link text-xs"></i>
                             </a>
                         </div>
                     </div>
                 </div>
                 <div class="site-card">
-                    <div class="flex">
-                        <img src="https://picsum.photos/seed/iitang/40/40" alt="一糖导航网站图标" class="favicon">
+                    <div class="flex items-start">
+                        <div class="favicon bg-blue-50 text-blue-700">
+                            <i class="fa fa-compass"></i>
+                        </div>
                         <div>
-                            <h3 class="font-semibold text-lg mb-1 text-dark">一糖导航</h3>
-                            <p class="text-gray-600 text-sm mb-3 line-clamp-2">实用的上网导航资源网址导航</p>
-                            <a href="https://iitang.com/#term-145" target="_blank" class="text-primary hover:text-primary/80 flex items-center gap-1 text-sm font-medium">
-                                访问网站 <i class="fa fa-external-link text-xs"></i>
+                            <h3 class="font-semibold text-base mb-1 text-dark">一糖导航</h3>
+                            <p class="text-gray-500 text-xs mb-2 line-clamp-2">实用的上网导航资源网址导航</p>
+                            <a href="https://iitang.com/#term-145" target="_blank" class="text-primary hover:text-primary/80 flex items-center gap-1 text-xs font-medium transition-colors">
+                                访问 <i class="fa fa-external-link text-xs"></i>
                             </a>
                         </div>
                     </div>
                 </div>
                 <div class="site-card">
-                    <div class="flex">
-                        <img src="https://picsum.photos/seed/liumingye/40/40" alt="刘明野的工具箱网站图标" class="favicon">
+                    <div class="flex items-start">
+                        <div class="favicon bg-blue-50 text-blue-700">
+                            <i class="fa fa-wrench"></i>
+                        </div>
                         <div>
-                            <h3 class="font-semibold text-lg mb-1 text-dark">刘明野的工具箱</h3>
-                            <p class="text-gray-600 text-sm mb-3 line-clamp-2">提供好用、易用的工具，还在不断添加中</p>
-                            <a href="https://tool.liumingye.cn/" target="_blank" class="text-primary hover:text-primary/80 flex items-center gap-1 text-sm font-medium">
-                                访问网站 <i class="fa fa-external-link text-xs"></i>
+                            <h3 class="font-semibold text-base mb-1 text-dark">刘明野的工具箱</h3>
+                            <p class="text-gray-500 text-xs mb-2 line-clamp-2">提供好用、易用的工具，还在不断添加中</p>
+                            <a href="https://tool.liumingye.cn/" target="_blank" class="text-primary hover:text-primary/80 flex items-center gap-1 text-xs font-medium transition-colors">
+                                访问 <i class="fa fa-external-link text-xs"></i>
                             </a>
                         </div>
                     </div>
                 </div>
                 <div class="site-card">
-                    <div class="flex">
-                        <img src="https://picsum.photos/seed/gitee/40/40" alt="开源软件 - Gitee.com网站图标" class="favicon">
+                    <div class="flex items-start">
+                        <div class="favicon bg-blue-50 text-blue-700">
+                            <i class="fa fa-code"></i>
+                        </div>
                         <div>
-                            <h3 class="font-semibold text-lg mb-1 text-dark">开源软件 - Gitee.com</h3>
-                            <p class="text-gray-600 text-sm mb-3 line-clamp-2">国内开源代码托管平台</p>
-                            <a href="https://gitee.com/explore" target="_blank" class="text-primary hover:text-primary/80 flex items-center gap-1 text-sm font-medium">
-                                访问网站 <i class="fa fa-external-link text-xs"></i>
+                            <h3 class="font-semibold text-base mb-1 text-dark">开源软件 - Gitee.com</h3>
+                            <p class="text-gray-500 text-xs mb-2 line-clamp-2">国内开源代码托管平台</p>
+                            <a href="https://gitee.com/explore" target="_blank" class="text-primary hover:text-primary/80 flex items-center gap-1 text-xs font-medium transition-colors">
+                                访问 <i class="fa fa-external-link text-xs"></i>
                             </a>
                         </div>
                     </div>
@@ -614,19 +694,21 @@
         </section>
 
         <!-- 个人资源类 -->
-        <section class="mb-16 section-fade-in">
-            <h2 class="category-title before:bg-gray-700 text-dark">
+        <section id="personal" class="mb-16 section-fade-in">
+            <h2 class="category-title before:bg-gray-700">
                 <i class="fa fa-user text-gray-700"></i>个人资源
             </h2>
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
                 <div class="site-card">
-                    <div class="flex">
-                        <img src="https://picsum.photos/seed/personal/40/40" alt="个人网页图标" class="favicon">
+                    <div class="flex items-start">
+                        <div class="favicon bg-gray-50 text-gray-700">
+                            <i class="fa fa-home"></i>
+                        </div>
                         <div>
-                            <h3 class="font-semibold text-lg mb-1 text-dark">个人网页</h3>
-                            <p class="text-gray-600 text-sm mb-3 line-clamp-2">本地存储的个人主页</p>
-                            <a href="file:///D:/%E4%B8%AA%E4%BA%BA%E4%B8%BB%E9%A1%B5/index.html" target="_blank" class="text-primary hover:text-primary/80 flex items-center gap-1 text-sm font-medium">
-                                访问网站 <i class="fa fa-external-link text-xs"></i>
+                            <h3 class="font-semibold text-base mb-1 text-dark">个人网页</h3>
+                            <p class="text-gray-500 text-xs mb-2 line-clamp-2">本地存储的个人主页</p>
+                            <a href="file:///D:/%E4%B8%AA%E4%BA%BA%E4%B8%BB%E9%A1%B5/index.html" target="_blank" class="text-primary hover:text-primary/80 flex items-center gap-1 text-xs font-medium transition-colors">
+                                访问 <i class="fa fa-external-link text-xs"></i>
                             </a>
                         </div>
                     </div>
@@ -635,50 +717,69 @@
         </section>
     </main>
 
-    <footer class="bg-dark text-white py-10 px-4">
+    <footer class="bg-dark text-white py-8 px-4">
         <div class="container mx-auto">
             <div class="flex flex-col md:flex-row justify-between items-center">
                 <div class="mb-6 md:mb-0">
                     <div class="flex items-center gap-2 mb-2">
-                        <i class="fa fa-compass text-primary text-xl"></i>
-                        <h2 class="text-xl font-bold">我的导航网页</h2>
+                        <i class="fa fa-compass text-primary"></i>
+                        <h2 class="text-base font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary to-accent">极简导航</h2>
                     </div>
-                    <p class="text-gray-400 text-sm">精心分类的常用网站导航，让上网更高效</p>
+                    <p class="text-gray-400 text-xs max-w-xs">精心分类的常用网站导航，让上网更高效</p>
                 </div>
-                <div class="flex gap-6">
-                    <a href="#" class="text-gray-400 hover:text-white transition-colors">
-                        <i class="fa fa-github text-xl"></i>
+                <div class="flex gap-5">
+                    <a href="#" class="text-gray-400 hover:text-white transition-colors text-lg">
+                        <i class="fa fa-github"></i>
                     </a>
-                    <a href="#" class="text-gray-400 hover:text-white transition-colors">
-                        <i class="fa fa-envelope text-xl"></i>
+                    <a href="#" class="text-gray-400 hover:text-white transition-colors text-lg">
+                        <i class="fa fa-envelope"></i>
                     </a>
-                    <a href="#" class="text-gray-400 hover:text-white transition-colors">
-                        <i class="fa fa-cog text-xl"></i>
+                    <a href="#" class="text-gray-400 hover:text-white transition-colors text-lg">
+                        <i class="fa fa-cog"></i>
                     </a>
                 </div>
             </div>
-            <div class="border-t border-gray-800 mt-8 pt-8 text-center text-gray-500 text-sm">
-                <p>© 2025 我的导航网页 | 设计与开发</p>
+            
+            <!-- 联系信息部分 -->
+            <div class="border-t border-gray-800 my-6 pt-6">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div class="flex items-center gap-2">
+                        <i class="fa fa-phone text-primary"></i>
+                        <span class="text-gray-300 text-sm">电话号码: 13414059274</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <i class="fa fa-envelope text-primary"></i>
+                        <span class="text-gray-300 text-sm">邮箱: 1307025065@qq.com</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <i class="fa fa-weixin text-primary"></i>
+                        <span class="text-gray-300 text-sm">微信号: xjj13414059274</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-800 pt-6 text-center text-gray-500 text-xs">
+                <p>© 2025 极简导航 | 设计与开发</p>
             </div>
         </div>
     </footer>
 
     <!-- 导入收藏夹模态框 (默认隐藏) -->
     <div id="importModal" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 hidden items-center justify-center p-4">
-        <div class="bg-white rounded-xl shadow-xl w-full max-w-md p-6 transform transition-all">
+        <div class="bg-white rounded-xl shadow-xl w-full max-w-md p-6 transform transition-all scale-95 opacity-0" id="modalContent">
             <div class="flex justify-between items-center mb-4">
-                <h3 class="text-xl font-bold text-dark">导入收藏夹</h3>
-                <button id="closeModal" class="text-gray-500 hover:text-dark">
+                <h3 class="text-lg font-bold text-dark">导入收藏夹</h3>
+                <button id="closeModal" class="text-gray-500 hover:text-dark transition-colors">
                     <i class="fa fa-times"></i>
                 </button>
             </div>
-            <p class="text-gray-600 mb-6">上传浏览器导出的书签HTML文件，自动导入到导航页</p>
-            <div class="border-2 border-dashed border-gray-200 rounded-lg p-8 text-center mb-6 hover:border-primary transition-colors cursor-pointer">
+            <p class="text-gray-600 text-sm mb-5">上传浏览器导出的书签HTML文件，自动导入到导航页</p>
+            <div class="border-2 border-dashed border-gray-200 rounded-lg p-6 text-center mb-5 hover:border-primary transition-colors cursor-pointer">
                 <input type="file" id="bookmarkFile" accept=".html" class="hidden">
-                <i class="fa fa-file-text-o text-3xl text-gray-400 mb-2"></i>
-                <p class="text-gray-500" id="filePlaceholder">点击或拖拽文件到此处</p>
+                <i class="fa fa-file-text-o text-2xl text-gray-400 mb-2"></i>
+                <p class="text-gray-500 text-sm" id="filePlaceholder">点击或拖拽文件到此处</p>
             </div>
-            <button id="confirmImport" class="w-full bg-primary hover:bg-primary/90 text-white py-3 rounded-lg transition-colors font-medium">
+            <button id="confirmImport" class="w-full gradient-bg hover:opacity-90 text-white py-2.5 rounded-lg transition-all font-medium text-sm">
                 开始导入
             </button>
         </div>
@@ -690,10 +791,13 @@
             // 处理滚动显示动画
             const sections = document.querySelectorAll('.section-fade-in');
             
+            // 错开时间显示各个区块，增强动画效果
             const observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
+                entries.forEach((entry, index) => {
                     if (entry.isIntersecting) {
-                        entry.target.classList.add('section-visible');
+                        setTimeout(() => {
+                            entry.target.classList.add('section-visible');
+                        }, index * 100); // 每个区块延迟100ms显示
                         observer.unobserve(entry.target);
                     }
                 });
@@ -710,6 +814,10 @@
             searchBtn.addEventListener('click', () => {
                 searchContainer.classList.toggle('hidden');
                 if (!searchContainer.classList.contains('hidden')) {
+                    // 添加淡入动画
+                    searchContainer.style.animation = 'none';
+                    searchContainer.offsetHeight; // 触发重绘
+                    searchContainer.style.animation = 'fadeIn 0.3s ease-out forwards';
                     searchContainer.querySelector('input').focus();
                 }
             });
@@ -717,6 +825,7 @@
             // 处理导入收藏夹模态框
             const importBtn = document.getElementById('importBtn');
             const importModal = document.getElementById('importModal');
+            const modalContent = document.getElementById('modalContent');
             const closeModal = document.getElementById('closeModal');
             const bookmarkFile = document.getElementById('bookmarkFile');
             const filePlaceholder = document.getElementById('filePlaceholder');
@@ -726,6 +835,12 @@
                 importModal.classList.remove('hidden');
                 importModal.classList.add('flex');
                 document.body.style.overflow = 'hidden';
+                
+                // 模态框动画
+                setTimeout(() => {
+                    modalContent.classList.remove('scale-95', 'opacity-0');
+                    modalContent.classList.add('scale-100', 'opacity-100', 'transition-all', 'duration-300');
+                }, 10);
             });
             
             closeModal.addEventListener('click', closeImportModal);
@@ -737,12 +852,17 @@
             });
             
             function closeImportModal() {
-                importModal.classList.add('hidden');
-                importModal.classList.remove('flex');
-                document.body.style.overflow = '';
-                // 重置文件输入
-                bookmarkFile.value = '';
-                filePlaceholder.textContent = '点击或拖拽文件到此处';
+                modalContent.classList.remove('scale-100', 'opacity-100');
+                modalContent.classList.add('scale-95', 'opacity-0', 'transition-all', 'duration-300');
+                
+                setTimeout(() => {
+                    importModal.classList.add('hidden');
+                    importModal.classList.remove('flex');
+                    document.body.style.overflow = '';
+                    // 重置文件输入
+                    bookmarkFile.value = '';
+                    filePlaceholder.textContent = '点击或拖拽文件到此处';
+                }, 300);
             }
             
             // 文件上传区域点击触发文件选择
@@ -811,13 +931,55 @@
             // 处理滚动时导航栏样式变化
             window.addEventListener('scroll', () => {
                 const header = document.querySelector('header');
-                if (window.scrollY > 100) {
-                    header.classList.add('py-2');
-                    header.classList.remove('py-4');
+                if (window.scrollY > 80) {
+                    header.classList.add('py-2', 'shadow');
+                    header.classList.remove('py-3', 'shadow-sm');
                 } else {
-                    header.classList.add('py-4');
-                    header.classList.remove('py-2');
+                    header.classList.add('py-3', 'shadow-sm');
+                    header.classList.remove('py-2', 'shadow');
                 }
+            });
+
+            // 添加全局动画样式
+            const style = document.createElement('style');
+            style.textContent = `
+                @keyframes fadeIn {
+                    from { opacity: 0; transform: translateY(-10px); }
+                    to { opacity: 1; transform: translateY(0); }
+                }
+                .animate-fadeIn {
+                    animation: fadeIn 0.3s ease-out forwards;
+                }
+            `;
+            document.head.appendChild(style);
+
+            // 左上角logo点击返回顶部
+            const logo = document.getElementById('logo');
+            logo.addEventListener('click', () => {
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth'
+                });
+            });
+
+            // 分类统计卡片点击跳转到对应分类
+            const categoryCards = document.querySelectorAll('[data-target]');
+            categoryCards.forEach(card => {
+                card.addEventListener('click', () => {
+                    const targetId = card.getAttribute('data-target');
+                    const targetElement = document.getElementById(targetId);
+                    
+                    if (targetElement) {
+                        // 计算目标元素的位置，考虑导航栏高度
+                        const headerHeight = document.querySelector('header').offsetHeight;
+                        const targetPosition = targetElement.getBoundingClientRect().top + window.pageYOffset - headerHeight;
+                        
+                        window.scrollTo({
+                            top: targetPosition,
+                            behavior: 'smooth'
+                        });
+                    }
+                });
             });
         });
     </script>
